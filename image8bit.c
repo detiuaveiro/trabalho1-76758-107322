@@ -10,7 +10,8 @@
 /// 2013, 2023
 
 // Student authors (fill in below):
-// NMec:  Name:
+// NMec:107322  Name: Bernardo Marujo
+// NMec:76758  Name: José Diogo Cerqueira
 // 
 // 
 // 
@@ -25,6 +26,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "instrumentation.h"
+#include <string.h>
 
 // The data structure
 //
@@ -171,7 +173,14 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
   assert (width >= 0);
   assert (height >= 0);
   assert (0 < maxval && maxval <= PixMax);
-  // Insert your code here!
+  Image img = (Image)malloc(sizeof(struct image));
+  img->height = height;
+  img->width = width;
+  img->maxval = maxval;
+  img->pixel = (uint8*)malloc(width*height*sizeof(uint8));
+  //start all the pixels with 0
+  memset(img->pixel, 0, width*height*sizeof(uint8));
+  return img;
 }
 
 /// Destroy the image pointed to by (*imgp).
@@ -181,7 +190,11 @@ Image ImageCreate(int width, int height, uint8 maxval) { ///
 /// Should never fail, and should preserve global errno/errCause.
 void ImageDestroy(Image* imgp) { ///
   assert (imgp != NULL);
-  // Insert your code here!
+  if (*imgp != NULL) {
+    free((*imgp)->pixel);
+    free(*imgp);
+    *imgp = NULL;
+  }
 }
 
 
