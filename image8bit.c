@@ -396,7 +396,6 @@ void ImageNegative(Image img) { ///
   for (int i = 0; i < pixelsize; i++) {
     img->pixel[i] = PixMax - img->pixel[i];
   }
-  
 }
 
 /// Apply threshold to image.
@@ -404,7 +403,14 @@ void ImageNegative(Image img) { ///
 /// all pixels with level>=thr to white (maxval).
 void ImageThreshold(Image img, uint8 thr) { ///
   assert (img != NULL);
-  // Insert your code here!
+  int pixelsize = img->width*img->height;
+  for (int i = 0; i < pixelsize; i++) {
+    if (img->pixel[i] < thr) {
+      img->pixel[i] = 0;
+    } else {
+      img->pixel[i] = img->maxval;
+    }
+  }
 }
 
 /// Brighten image by a factor.
@@ -414,7 +420,14 @@ void ImageThreshold(Image img, uint8 thr) { ///
 void ImageBrighten(Image img, double factor) { ///
   assert (img != NULL);
   // ? assert (factor >= 0.0);
-  // Insert your code here!
+  int pixelsize = img->width*img->height;
+  for (int i = 0; i < pixelsize; i++) {
+    if (img->pixel[i] * factor > img->maxval) {
+      img->pixel[i] = img->maxval;
+    } else {
+      img->pixel[i] = img->pixel[i] * factor;
+    }
+  }
 }
 
 
