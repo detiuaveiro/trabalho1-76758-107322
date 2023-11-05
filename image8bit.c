@@ -299,6 +299,27 @@ int ImageMaxval(Image img) { ///
   return img->maxval;
 }
 
+uint8 searchMax(uint8* a, int n) {
+  int indexMax = 0;
+  for( int i=1; i<n; i++ ) {
+      if( a[i] > a[indexMax] ) {
+        indexMax = i;
+      }
+    }
+  return a[indexMax];
+}
+
+
+uint8 searchMin(uint8* a, int n) {
+  int indexMin = 0; 
+  for (int i = 1; i < n; i++) {
+    if (a[i] < a[indexMin]) {
+      indexMin = i; 
+    }
+  }
+  return a[indexMin]; 
+}
+
 /// Pixel stats
 /// Find the minimum and maximum gray levels in image.
 /// On return,
@@ -306,7 +327,10 @@ int ImageMaxval(Image img) { ///
 /// *max is set to the maximum.
 void ImageStats(Image img, uint8* min, uint8* max) { ///
   assert (img != NULL);
-  // Insert your code here!
+  int pixelsize = img->width*img->height;
+  *max = searchMax(img->pixel, pixelsize);
+  *min = searchMin(img->pixel, pixelsize);
+
 }
 
 /// Check if pixel position (x,y) is inside img.
@@ -318,7 +342,7 @@ int ImageValidPos(Image img, int x, int y) { ///
 /// Check if rectangular area (x,y,w,h) is completely inside img.
 int ImageValidRect(Image img, int x, int y, int w, int h) { ///
   assert (img != NULL);
-  // Insert your code here!
+  return (0 <= x && x < img->width) && (0 <= y && y < img->height) && (0 <= w && w < img->width) && (0 <= h && h < img->height);
 }
 
 /// Pixel get & set operations
@@ -333,7 +357,7 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
 // The returned index must satisfy (0 <= index < img->width*img->height)
 static inline int G(Image img, int x, int y) {
   int index;
-  // Insert your code here!
+  index = y*img->width + x;
   assert (0 <= index && index < img->width*img->height);
   return index;
 }
@@ -368,7 +392,11 @@ void ImageSetPixel(Image img, int x, int y, uint8 level) { ///
 /// resulting in a "photographic negative" effect.
 void ImageNegative(Image img) { ///
   assert (img != NULL);
-  // Insert your code here!
+  int pixelsize = img->width*img->height;
+  for (int i = 0; i < pixelsize; i++) {
+    img->pixel[i] = PixMax - img->pixel[i];
+  }
+  
 }
 
 /// Apply threshold to image.
@@ -503,4 +531,3 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
 void ImageBlur(Image img, int dx, int dy) { ///
   // Insert your code here!
 }
-
