@@ -355,7 +355,7 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
 // Transform (x, y) coords into linear pixel index.
 // This internal function is used in ImageGetPixel / ImageSetPixel. 
 // The returned index must satisfy (0 <= index < img->width*img->height)
-static inline int G(Image img, int x, int y) {
+static inline int G(Image img, int x, int y) { ///
   int index;
   index = y*img->width + x;
   assert (0 <= index && index < img->width*img->height);
@@ -563,14 +563,17 @@ void ImagePaste(Image img1, int x, int y, Image img2) { ///
 /// alpha usually is in [0.0, 1.0], but values outside that interval
 /// may provide interesting effects.  Over/underflows should saturate.
 void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
-  assert (img1 != NULL);
-  assert (img2 != NULL);
-  assert (ImageValidRect(img1, x, y, img2->width, img2->height));
-  for (int i = 0; i < img2->height; i++) {
-    for (int j = 0; j < img2->width; j++) {
-      ImageSetPixel(img1, x + j, y + i, ImageGetPixel(img1, x + j, y + i) * (1 - alpha) + ImageGetPixel(img2, j, i) * alpha);
+    assert(img1 != NULL);
+    assert(img2 != NULL);
+    assert(ImageValidRect(img1, x, y, img2->width, img2->height));
+
+    for (int i = 0; i < img2->height; i++) {
+        for (int j = 0; j < img2->width; j++) {
+            double blendedValue = ImageGetPixel(img1, x + j, y + i) * (1 - alpha) + ImageGetPixel(img2, j, i) * alpha;
+            uint8 roundedValue = (uint8)(blendedValue + 0.5);
+            ImageSetPixel(img1, x + j, y + i, roundedValue);
+        }
     }
-  }
 }
 
 /// Compare an image to a subimage of a larger image.
@@ -620,27 +623,35 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
 /// [x-dx, x+dx]x[y-dy, y+dy].
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy) { ///
-  assert (img != NULL);
-  assert (dx >= 0);
-  assert (dy >= 0);
-  int pixelsize = img->width*img->height;
-  Image img_copy = ImageCreate(img->width, img->height, img->maxval);
-  img_copy->pixel = (uint8*)malloc(pixelsize*sizeof(uint8));
-  memcpy(img_copy->pixel, img->pixel, pixelsize*sizeof(uint8));
-  for (int i = 0; i < img->height; i++) {
-    for (int j = 0; j < img->width; j++) {
-      int sum = 0;
-      int count = 0;
-      for (int k = i - dy; k <= i + dy; k++) {
-        for (int l = j - dx; l <= j + dx; l++) {
-          if (ImageValidPos(img, l, k)) {
-            sum += ImageGetPixel(img_copy, l, k);
-            count++;
-          }
+    assert(img != NULL);
+    assert(dx >= 0);
+    assert(dy >= 0);
+    
+    int pixelsize = img->width * img->height;
+    Image img_copy = ImageCreate(img->width, img->height, img->maxval);
+    img_copy->pixel = (uint8*)malloc(pixelsize * sizeof(uint8));
+    memcpy(img_copy->pixel, img->pixel, pixelsize * sizeof(uint8));
+    
+    for (int i = 0; i < img->height; i++) {
+
+        for (int j = 0; j < img->width; j++) {
+            double sum = 0.0;
+            int count = 0;
+            
+            for (int k = i - dy; k <= i + dy; k++) {
+
+                for (int l = j - dx; l <= j + dx; l++) {
+                  
+                    if (ImageValidPos(img, l, k)) {
+                        sum += ImageGetPixel(img_copy, l, k);
+                        count++;
+                    }
+                }
+            }
+            
+            uint8 roundedValue = (uint8)(round(sum / count));
+            ImageSetPixel(img, j, i, roundedValue);
         }
-      }
-      ImageSetPixel(img, j, i, sum / count);
     }
-  }
-  free(img_copy);
+    free(img_copy);
 }
