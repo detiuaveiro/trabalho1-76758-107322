@@ -454,7 +454,13 @@ void ImageBrighten(Image img, double factor) { ///
 /// On failure, returns NULL and errno/errCause are set accordingly.
 Image ImageRotate(Image img) { ///
   assert (img != NULL);
-  // Insert your code here!
+  Image img_rotated = ImageCreate(img->height, img->width, img->maxval);
+  for (int i = 0; i < img->height; i++) {
+    for (int j = 0; j < img->width; j++) {
+      ImageSetPixel(img_rotated, j, img->width - 1 - i, ImageGetPixel(img, i, j)); 
+    }
+  }
+  return img_rotated;
 }
 
 /// Mirror an image = flip left-right.
@@ -466,7 +472,13 @@ Image ImageRotate(Image img) { ///
 /// On failure, returns NULL and errno/errCause are set accordingly.
 Image ImageMirror(Image img) { ///
   assert (img != NULL);
-  // Insert your code here!
+  Image img_mirrored = ImageCreate(img->width, img->height, img->maxval);
+  for (int i = 0; i < img->height; i++) {
+    for (int j = 0; j < img->width; j++) {
+      ImageSetPixel(img_mirrored, j, i, ImageGetPixel(img, img->width - 1 - j, i)); 
+    }
+  }
+  return img_mirrored;
 }
 
 /// Crop a rectangular subimage from img.
@@ -484,7 +496,13 @@ Image ImageMirror(Image img) { ///
 Image ImageCrop(Image img, int x, int y, int w, int h) { ///
   assert (img != NULL);
   assert (ImageValidRect(img, x, y, w, h));
-  // Insert your code here!
+  Image img_cropped = ImageCreate(w, h, img->maxval);
+  for (int i = 0; i < h; i++) {
+    for (int j = 0; j < w; j++) { 
+      ImageSetPixel(img_cropped, j, i, ImageGetPixel(img, x + j, y + i));
+    }
+  }
+  return img_cropped;
 }
 
 
@@ -498,7 +516,11 @@ void ImagePaste(Image img1, int x, int y, Image img2) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
   assert (ImageValidRect(img1, x, y, img2->width, img2->height));
-  // Insert your code here!
+  for (int i = 0; i < img2->height; i++) {
+    for (int j = 0; j < img2->width; j++) {
+      ImageSetPixel(img1, x + j, y + i, ImageGetPixel(img2, j, i));
+    }
+  }
 }
 
 /// Blend an image into a larger image.
@@ -511,7 +533,11 @@ void ImageBlend(Image img1, int x, int y, Image img2, double alpha) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
   assert (ImageValidRect(img1, x, y, img2->width, img2->height));
-  // Insert your code here!
+  for (int i = 0; i < img2->height; i++) {
+    for (int j = 0; j < img2->width; j++) {
+      ImageSetPixel(img1, x + j, y + i, ImageGetPixel(img1, x + j, y + i) * (1 - alpha) + ImageGetPixel(img2, j, i) * alpha);
+    }
+  }
 }
 
 /// Compare an image to a subimage of a larger image.
@@ -521,7 +547,15 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
   assert (ImageValidPos(img1, x, y));
-  // Insert your code here!
+  assert (ImageValidRect(img1, x, y, img2->width, img2->height));
+  for (int i = 0; i < img2->height; i++) {
+    for (int j = 0; j < img2->width; j++) {
+      if (ImageGetPixel(img1, x + j, y + i) != ImageGetPixel(img2, j, i)) {
+        return 0;
+      }
+    }
+  }
+  return 1;
 }
 
 /// Locate a subimage inside another image.
@@ -531,7 +565,18 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
 int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
-  // Insert your code here!
+  assert (px != NULL);
+  assert (py != NULL);
+  for (int i = 0; i < img1->height - img2->height; i++) {
+    for (int j = 0; j < img1->width - img2->width; j++) {
+      if (ImageMatchSubImage(img1, j, i, img2)) {
+        *px = j;
+        *py = i;
+        return 1;
+      }
+    }
+  }
+  return 0;
 }
 
 
@@ -542,5 +587,27 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
 /// [x-dx, x+dx]x[y-dy, y+dy].
 /// The image is changed in-place.
 void ImageBlur(Image img, int dx, int dy) { ///
-  // Insert your code here!
+  assert (img != NULL);
+  assert (dx >= 0);
+  assert (dy >= 0);
+  int pixelsize = img->width*img->height;
+  Image img_copy = ImageCreate(img->width, img->height, img->maxval);
+  img_copy->pixel = (uint8*)malloc(pixelsize*sizeof(uint8));
+  memcpy(img_copy->pixel, img->pixel, pixelsize*sizeof(uint8));
+  for (int i = 0; i < img->height; i++) {
+    for (int j = 0; j < img->width; j++) {
+      int sum = 0;
+      int count = 0;
+      for (int k = i - dy; k <= i + dy; k++) {
+        for (int l = j - dx; l <= j + dx; l++) {
+          if (ImageValidPos(img, l, k)) {
+            sum += ImageGetPixel(img_copy, l, k);
+            count++;
+          }
+        }
+      }
+      ImageSetPixel(img, j, i, sum / count);
+    }
+  }
+  free(img_copy);
 }
