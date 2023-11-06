@@ -413,19 +413,52 @@ void ImageThreshold(Image img, uint8 thr) { ///
   }
 }
 
+double floor(double x) {
+    int int_x = (int)x;
+    if (x >= 0.0 || x == int_x) {
+        return (double)int_x;
+    } else {
+        return (double)(int_x - 1);
+    }
+}
+
+double ceil(double x) {
+    int int_x = (int)x;
+    if (x <= 0.0 || x == int_x) {
+        return (double)int_x;
+    } else {
+        return (double)(int_x + 1);
+    }
+}
+
+double round(double x) {
+    if (x >= 0.0) {
+        return floor(x + 0.5);
+    } else {
+        return ceil(x - 0.5);
+    }
+}
+
+double fmin(double x, double y) {
+    return x < y ? x : y;
+}
+
+
 /// Brighten image by a factor.
 /// Multiply each pixel level by a factor, but saturate at maxval.
 /// This will brighten the image if factor>1.0 and
 /// darken the image if factor<1.0.
 void ImageBrighten(Image img, double factor) { ///
   assert (img != NULL);
-  // ? assert (factor >= 0.0);
+  assert (factor >= 0.0);
   int pixelsize = img->width*img->height;
   for (int i = 0; i < pixelsize; i++) {
-    if (img->pixel[i] * factor > img->maxval) {
+    double pixel_factor = (double)img->pixel[i] * factor;
+    pixel_factor = fmin(img->maxval, round(pixel_factor));
+    if (pixel_factor > img->maxval) {
       img->pixel[i] = img->maxval;
     } else {
-      img->pixel[i] = img->pixel[i] * factor;
+      img->pixel[i] = pixel_factor;
     }
   }
 }
