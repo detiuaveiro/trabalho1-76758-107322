@@ -453,8 +453,7 @@ void ImageBrighten(Image img, double factor) { ///
   assert (factor >= 0.0);
   int pixelsize = img->width*img->height;
   for (int i = 0; i < pixelsize; i++) {
-    double pixel_factor = (double)img->pixel[i] * factor;
-    pixel_factor = round(pixel_factor);
+    double pixel_factor = round((double)img->pixel[i] * factor);
     if (pixel_factor > img->maxval) {
       img->pixel[i] = img->maxval;
     } else {
@@ -637,7 +636,7 @@ void ImageBlur(Image img, int dx, int dy) { ///
         for (int j = 0; j < img->width; j++) {
             double sum = 0.0;
             int count = 0;
-            
+  
             for (int k = i - dy; k <= i + dy; k++) {
 
                 for (int l = j - dx; l <= j + dx; l++) {
