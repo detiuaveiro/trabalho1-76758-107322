@@ -358,8 +358,8 @@ int ImageValidRect(Image img, int x, int y, int w, int h) { ///
 // The returned index must satisfy (0 <= index < img->width*img->height)
 static inline int G(Image img, int x, int y) { ///
   int index;
-  index = y*img->width + x;
-  assert (0 <= index && index < img->width*img->height);
+  index = y*img->width + x;                               // unidimensional array index
+  assert (0 <= index && index < img->width*img->height);  // index must be in range
   return index;
 }
 
@@ -368,7 +368,7 @@ uint8 ImageGetPixel(Image img, int x, int y) { ///
   assert (img != NULL);
   assert (ImageValidPos(img, x, y));
   PIXMEM += 1;  // count one pixel access (read)
-  return img->pixel[G(img, x, y)];
+  return img->pixel[G(img, x, y)];  
 } 
 
 /// Set the pixel at position (x,y) to new level.
@@ -456,12 +456,12 @@ void ImageBrighten(Image img, double factor) { ///
 /// On success, a new image is returned.
 /// (The caller is responsible for destroying the returned image!)
 /// On failure, returns NULL and errno/errCause are set accordingly.
-Image ImageRotate(Image img) { ///
+Image ImageRotate(Image img) {
   assert (img != NULL);
   Image img_rotated = ImageCreate(img->height, img->width, img->maxval);
   for (int i = 0; i < img->height; i++) {
     for (int j = 0; j < img->width; j++) {
-      ImageSetPixel(img_rotated, j, img->width - 1 - i, ImageGetPixel(img, i, j)); 
+      ImageSetPixel(img_rotated, j, img->height - 1 - i, ImageGetPixel(img, i, j));
     }
   }
   return img_rotated;
@@ -497,16 +497,15 @@ Image ImageMirror(Image img) { ///
 /// On success, a new image is returned.
 /// (The caller is responsible for destroying the returned image!)
 /// On failure, returns NULL and errno/errCause are set accordingly.
-Image ImageCrop(Image img, int x, int y, int w, int h) { ///
+Image ImageRotate(Image img) { ///
   assert (img != NULL);
-  assert (ImageValidRect(img, x, y, w, h));
-  Image img_cropped = ImageCreate(w, h, img->maxval);
-  for (int i = 0; i < h; i++) {
-    for (int j = 0; j < w; j++) { 
-      ImageSetPixel(img_cropped, j, i, ImageGetPixel(img, x + j, y + i));
+  Image img_rotated = ImageCreate(img->height, img->width, img->maxval);
+  for (int i = 0; i < img->height; i++) {
+    for (int j = 0; j < img->width; j++) {
+      ImageSetPixel(img_rotated, j, img->width - 1 - i, ImageGetPixel(img, i, j)); 
     }
   }
-  return img_cropped;
+  return img_rotated;
 }
 
 
@@ -575,7 +574,7 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
   assert (px != NULL);
   assert (py != NULL);
   for (int i = 0; i < img1->height - img2->height; i++) {
-    for (int j = 0; j < img1->width - img2->width; j++) {
+    for (int j = 0; j < img1->width - img2->width; j++) { 
       if (ImageMatchSubImage(img1, j, i, img2)) {
         *px = j;
         *py = i;
@@ -593,7 +592,7 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
 /// Each pixel is substituted by the mean of the pixels in the rectangle
 /// [x-dx, x+dx]x[y-dy, y+dy].
 /// The image is changed in-place.
-void ImageBlur(Image img, int dx, int dy) { ///
+void ImageBlur(Image img, int dx, int dy) {
     assert(img != NULL);
     assert(dx >= 0);
     assert(dy >= 0);
@@ -612,7 +611,6 @@ void ImageBlur(Image img, int dx, int dy) { ///
             for (int k = i - dy; k <= i + dy; k++) {
 
                 for (int l = j - dx; l <= j + dx; l++) {
-                  
                     if (ImageValidPos(img, l, k)) {
                         sum += ImageGetPixel(img_copy, l, k);
                         count++;
@@ -624,5 +622,74 @@ void ImageBlur(Image img, int dx, int dy) { ///
             ImageSetPixel(img, j, i, roundedValue);
         }
     }
+    free(img_copy->pixel);
     free(img_copy);
+}
+
+void ImageBlurOptimized(Image img, int dx, int dy) {
+    assert(img != NULL);
+    assert(dx >= 0);
+    assert(dy >= 0);
+
+    int width = img->width;
+    int height = img->height;
+
+    // Create an array to store cumulative sums
+    double** cumSum = (double**)malloc(height * sizeof(double*));
+    for (int i = 0; i < height; i++) {
+        cumSum[i] = (double*)malloc(width * sizeof(double));
+    }
+
+    // Calculate cumulative sums
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            cumSum[i][j] = ImageGetPixel(img, j, i);
+
+            if (j > 0) {
+                cumSum[i][j] += cumSum[i][j - 1];
+            }
+
+            if (i > 0) {
+                cumSum[i][j] += cumSum[i - 1][j];
+            }
+
+            if (i > 0 && j > 0) {
+                cumSum[i][j] -= cumSum[i - 1][j - 1];
+            }
+        }
+    }
+
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            int iMin = (i - dy > 0) ? i - dy : 0;
+            int iMax = (i + dy < height - 1) ? i + dy : height - 1;
+            int jMin = (j - dx > 0) ? j - dx : 0;
+            int jMax = (j + dx < width - 1) ? j + dx : width - 1;
+
+            int count = (iMax - iMin + 1) * (jMax - jMin + 1);
+
+            double sum = cumSum[iMax][jMax];
+
+            if (iMin > 0) {
+                sum -= cumSum[iMin - 1][jMax];
+            }
+
+            if (jMin > 0) {
+                sum -= cumSum[iMax][jMin - 1];
+            }
+
+            if (iMin > 0 && jMin > 0) {
+                sum += cumSum[iMin - 1][jMin - 1];
+            }
+
+            uint8 roundedValue = (uint8)(round(sum / count));
+            ImageSetPixel(img, j, i, roundedValue);
+        }
+    }
+
+    // Free the allocated memory
+    for (int i = 0; i < height; i++) {
+        free(cumSum[i]);
+    }
+    free(cumSum);
 }

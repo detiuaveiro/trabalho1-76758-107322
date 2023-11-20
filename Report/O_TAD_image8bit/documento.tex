@@ -111,9 +111,144 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Introdução}
 
+Neste relatório é apresentado o trabalho prático realizado no âmbito da unidade curricular de Algoritmos e Estruturas de Dados, com dois objetivos principais.
+\par
+O primeiro é desenvolver desenvolver e testar o TAD (Tipo Abstrato de Dados) image8bit, que permite manipular imagens de 8 bits com com níveis de cinzento, em que cada pixel pode tomar valores de intensidade entre 0 e 255.
+\par
+O segundo é analisar a complexidade computacional da função ImageLocateSubImage(...) que permite determinar, caso exista, a localização de uma subimagem numa imagem dada, e da função ImageBlur(…) que aplica um filtro a uma imagem e a torna baça.
 
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Estrutura de Dados e Funções do TAD image8bit}
+
+\section{Estrutura de Dados image8bit}
+
+A estrutura de dados image8bit é composta por um ponteiro para um array de pixeis, um inteiro que representa a largura da imagem, um inteiro que representa a altura da imagem e um inteiro que representa o número de pixeis da imagem.
+\par
+O array de pixeis é um array de unsigned char, em que cada posição do array representa um pixel da imagem, e cada pixel pode tomar valores de intensidade entre 0 e 255. A posição do pixel (x,y) no array é dada por x + y * (largura da imagem).
+\par
+A estrutura de dados image8bit é definida da seguinte forma:
+
+\begin{lstlisting}
+typedef struct image8bit {
+    unsigned char *data;
+    int width;
+    int height;
+    int num_pixels;
+} *Image8bit;
+\end{lstlisting}
+
+
+\section{Função G(img,x,y)}
+
+A função G(img,x,y) transforma as coordenadas (x,y) da imagem num índice do array linear que representa a imagem e é usada pelas funções image8bitGetPixel(...) e image8bitSetPixel(...).
+\par
+
+\par
+A função é definida da seguinte forma:
+
+\begin{lstlisting}
+static inline int G(Image img, int x, int y) {
+    int index;
+    index = y*img->width + x;
+    assert (0 <= index && index < img->width*img->height);
+    return index;
+}
+\end{lstlisting}
+
+\section{Função image8bitGetPixel(...)}
+A função image8bitGetPixel(img,x,y) devolve o valor do pixel (x,y) da imagem img.
+\par
+
+A função é definida da seguinte forma:
+\begin{lstlisting}
+uint8 ImageGetPixel(Image img, int x, int y) {
+    assert (img != NULL);
+    assert (ImageValidPos(img, x, y));
+    PIXMEM += 1;  // count one pixel access (read)
+    return img->pixel[G(img, x, y)];  
+} 
+\end{lstlisting}
+
+\section{Função image8bitSetPixel(...)}
+A função image8bitSetPixel(img,x,y,level) altera o valor do pixel (x,y) da imagem img para o valor level.
+\par
+\begin{lstlisting}
+void ImageSetPixel(Image img, int x, int y, uint8 level) {
+    assert (img != NULL);
+    assert (ImageValidPos(img, x, y));
+    PIXMEM += 1;  // count one pixel access (store)
+    img->pixel[G(img, x, y)] = level;
+} 
+\end{lstlisting}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Apresentação e Análise da Complexidade Computacional das Funções ImageLocateSubImage(...) e ImageBlur(...)}
+
+\section{Função ImageLocateSubImage(...)}
+\subsection{Apresentação}
+
+A função ImageLocateSubImage(...) permite determinar, caso exista, a localização de uma subimagem numa imagem dada.
+\par
+Para determinar a localização da subimagem, a função percorre a imagem dada e, para cada pixel da imagem, verifica se a subimagem se encontra nessa posição. 
+Para verificar se a subimagem se encontra nessa posição, a função percorre a subimagem e verifica se os pixeis da subimagem são iguais aos pixeis da imagem na posição (x,y) da imagem.
+\par
+Divindo a função em duas partes, a primeira parte percorre a imagem dada e a segunda parte percorre a subimagem, a complexidade computacional da função é dada por !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+\par
+\begingroup
+\begin{lstlisting}
+    int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
+        assert (img1 != NULL);
+        assert (img2 != NULL);
+        assert (px != NULL);
+        assert (py != NULL);
+        for (int i = 0; i < img1->height - img2->height; i++) {
+            for (int j = 0; j < img1->width - img2->width; j++) {
+                if (ImageMatchSubImage(img1, j, i, img2)) {
+                    *px = j;
+                    *py = i;
+                    return 1;
+                }
+            }
+        }
+        return 0;
+    }
+    \end{lstlisting}
+    
+\begin{lstlisting}
+int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
+  assert (img1 != NULL);
+  assert (img2 != NULL);
+  assert (ImageValidPos(img1, x, y));
+  assert (ImageValidRect(img1, x, y, img2->width, img2->height));
+  for (int i = 0; i < img2->height; i++) {
+    for (int j = 0; j < img2->width; j++) {
+      if (ImageGetPixel(img1, x + j, y + i) != ImageGetPixel(img2, j, i)) {
+        return 0;
+      }
+    }
+  }
+  return 1;
+}
+\end{lstlisting}
+\endgroup
+
+\subsection{Dados Experimentais}
+
+\tab A função ImageLocateSubImage(...) foi testada com 3 imagens base e 3 subimagens.
+\par
+As imagens base são imagens têm as dimensões (300x300), (765x460) e (1200x1600), e as subimagens têm as dimensões (222x217), (512x512) e (940x940).
+\par
+
+
+
+\subsection{Análise}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Conclusões}
 
 
 
