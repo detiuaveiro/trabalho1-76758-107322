@@ -15,7 +15,7 @@
 // 
 // 
 // 
-// Date:
+// Date:20/11/2023
 //
 
 #include "image8bit.h"
@@ -27,6 +27,7 @@
 #include <stdlib.h>
 #include "instrumentation.h"
 #include <string.h>
+#include <math.h>
 
 // The data structure
 //
@@ -413,35 +414,6 @@ void ImageThreshold(Image img, uint8 thr) { ///
   }
 }
 
-double floor(double x) {
-    int int_x = (int)x;
-    if (x >= 0.0 || x == int_x) {
-        return (double)int_x;
-    } else {
-        return (double)(int_x - 1);
-    }
-}
-
-double ceil(double x) {
-    int int_x = (int)x;
-    if (x <= 0.0 || x == int_x) {
-        return (double)int_x;
-    } else {
-        return (double)(int_x + 1);
-    }
-}
-
-double round(double x) {
-    if (x >= 0.0) {
-        return floor(x + 0.5);
-    } else {
-        return ceil(x - 0.5);
-    }
-}
-
-double fmin(double x, double y) {
-    return x < y ? x : y;
-}
 
 
 /// Brighten image by a factor.
