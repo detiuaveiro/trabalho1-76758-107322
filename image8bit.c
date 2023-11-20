@@ -461,8 +461,8 @@ void ImageBrighten(Image img, double factor) { ///
 Image ImageRotate(Image img) {
   assert (img != NULL);
   Image img_rotated = ImageCreate(img->height, img->width, img->maxval);
-  for (int i = 0; i < img->height; i++) {
-    for (int j = 0; j < img->width; j++) {
+  for (int i = 0; i < img->width; i++) {
+    for (int j = 0; j < img->height; j++) {
       printf("%d %d\n", i, j);
       ImageSetPixel(img_rotated, j, img->width - 1 - i, ImageGetPixel(img, i, j));
     }

@@ -87,6 +87,9 @@ test12: $(PROGS) setup
 test13: $(PROGS) setup
 	./imageTool pgm/small/art3_222x217.pgm rotate save rotate.pgm
 
+test14: $(PROGS) setup
+	./imageTool pgm/large/airfield-05_1600x1200.pgm crop 0,0,800,600 save crop.pgm
+
 .PHONY: tests
 tests: $(TESTS)
 
