@@ -78,6 +78,15 @@ test9: $(PROGS) setup
 test10: $(PROGS) setup
 	./imageTool test/small.pgm test/paste.pgm locate
 
+test11: $(PROGS) setup
+	./imageTool pgm/large/airfield-05_1600x1200.pgm blur 7,7 save blur.pgm
+
+test12: $(PROGS) setup
+	./imageTool pgm/large/airfield-05_1600x1200.pgm rotate save rotate.pgm
+
+test13: $(PROGS) setup
+	./imageTool pgm/small/art3_222x217.pgm rotate save rotate.pgm
+
 .PHONY: tests
 tests: $(TESTS)
 
