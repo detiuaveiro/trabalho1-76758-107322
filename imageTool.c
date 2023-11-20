@@ -100,7 +100,7 @@ int main(int ac, char* av[]) {
   const int N = 10;   // buffer capacity
   Image img[N];     // the images
   int n = 0;          // number of images created
-
+  
   int k = 1;
   while (k < ac) {
     if (strcmp(av[k], "info") == 0) {
