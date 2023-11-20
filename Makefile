@@ -40,7 +40,7 @@ test/:
 	@#unzip -q -o test/aed-trab1-test.zip -d test/
 
 test1: $(PROGS) setup
-	./imageTool pgm/original.pgm neg save neg.pgm
+	./imageTool test/original.pgm neg save neg.pgm
 	cmp neg.pgm test/neg.pgm
 
 test2: $(PROGS) setup

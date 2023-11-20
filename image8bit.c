@@ -500,15 +500,16 @@ Image ImageMirror(Image img) { ///
 /// On success, a new image is returned.
 /// (The caller is responsible for destroying the returned image!)
 /// On failure, returns NULL and errno/errCause are set accordingly.
-Image ImageRotate(Image img) { ///
+Image ImageCrop(Image img, int x, int y, int w, int h) { ///
   assert (img != NULL);
-  Image img_rotated = ImageCreate(img->height, img->width, img->maxval);
-  for (int i = 0; i < img->height; i++) {
-    for (int j = 0; j < img->width; j++) {
-      ImageSetPixel(img_rotated, j, img->width - 1 - i, ImageGetPixel(img, i, j)); 
+  assert (ImageValidRect(img, x, y, w, h));
+  Image img_cropped = ImageCreate(w, h, img->maxval);
+  for (int i = 0; i < h; i++) {
+    for (int j = 0; j < w; j++) { 
+      ImageSetPixel(img_cropped, j, i, ImageGetPixel(img, x + j, y + i));
     }
   }
-  return img_rotated;
+  return img_cropped;
 }
 
 
