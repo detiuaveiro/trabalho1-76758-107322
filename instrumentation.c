@@ -88,7 +88,7 @@ double InstrCTU = 1.0;  ///extern
 void InstrCalibrate(void) { ///
   const int size = 4*1024;     // 2^12!
   const int mask = size - 1;
-  int array[size];  // alloc array in stack, not initialized on purpose
+  int* array = (int*)malloc(size * sizeof(int)); // Dynamically allocate memory for the counters
   double time = cpu_time();
   srand((unsigned int)(time*1e9));
   for (int n = 0; n < 40000000; n++) {
@@ -98,6 +98,7 @@ void InstrCalibrate(void) { ///
     array[k] ^= array[i] + array[j] + i*j;
     //printf("%d %d %d\n", i, j, k);  // debug
   }
+  free(array);
   InstrCTU = cpu_time() - time;
 }
 

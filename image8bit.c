@@ -149,12 +149,14 @@ static int check(int condition, const char* failmsg) {
 void ImageInit(void) { ///
   InstrCalibrate();
   InstrName[0] = "pixmem";  // InstrCount[0] will count pixel array acesses
+  InstrName[1] = "adds";
   // Name other counters here...
   
 }
 
 // Macros to simplify accessing instrumentation counters:
 #define PIXMEM InstrCount[0]
+#define ADDS InstrCount[1]
 // Add more macros here...
 
 // TIP: Search for PIXMEM or InstrCount to see where it is incremented!
@@ -461,7 +463,8 @@ Image ImageRotate(Image img) {
   Image img_rotated = ImageCreate(img->height, img->width, img->maxval);
   for (int i = 0; i < img->height; i++) {
     for (int j = 0; j < img->width; j++) {
-      ImageSetPixel(img_rotated, j, img->height - 1 - i, ImageGetPixel(img, i, j));
+      printf("%d %d\n", i, j);
+      ImageSetPixel(img_rotated, j, img->width - 1 - i, ImageGetPixel(img, i, j));
     }
   }
   return img_rotated;
