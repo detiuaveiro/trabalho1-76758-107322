@@ -75,6 +75,7 @@ test9: $(PROGS) setup
 	./imageTool test/original.pgm blur 7,7 save blur.pgm
 	cmp blur.pgm test/blur.pgm
 
+############## TESTES ADICIONADOS
 test10: $(PROGS) setup
 	./imageTool test/small.pgm test/paste.pgm locate
 
@@ -93,8 +94,15 @@ test14: $(PROGS) setup
 testBLUR: $(PROGS) setup
 	./imageTest pgm/large/airfield-05_1600x1200.pgm BLUR_TEST_WITH_INFO.pgm blur
 
+test_to_paste: $(PROGS) setup
+	./imageTool pgm/large/einstein_940x940.pgm pgm/large/airfield-05_1600x1200.pgm paste 300,100 save paste_test_1600x1200.pgm
+
+test_to_locate: $(PROGS) setup
+	./imageTool pgm/large/einstein_940x940.pgm paste_test_1600x1200.pgm locate
+
 testLOCATE: $(PROGS) setup
-	./imageTest pgm/large/airfield-05_1600x1200.pgm LOCATE_TEST_WITH_INFO.pgm locate
+	./imageTest pgm/large/einstein_940x940.pgm paste_test_1600x1200.pgm locate
+##############
 
 .PHONY: tests
 tests: $(TESTS)
