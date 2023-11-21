@@ -91,7 +91,10 @@ test14: $(PROGS) setup
 	./imageTool pgm/large/airfield-05_1600x1200.pgm crop 0,0,800,600 save crop.pgm
 
 testBLUR: $(PROGS) setup
-	./imageTest pgm/large/airfield-05_1600x1200.pgm BLUR_TEST_WITH_INFO.pgm
+	./imageTest pgm/large/airfield-05_1600x1200.pgm BLUR_TEST_WITH_INFO.pgm blur
+
+testLOCATE: $(PROGS) setup
+	./imageTest pgm/large/airfield-05_1600x1200.pgm LOCATE_TEST_WITH_INFO.pgm locate
 
 .PHONY: tests
 tests: $(TESTS)

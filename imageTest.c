@@ -19,63 +19,79 @@
 #include "instrumentation.h"
 
 int main(int argc, char* argv[]) {
-  //int x, y;
-  program_name = argv[0];
-  if (argc != 3) {
-    error(1, 0, "Usage: imageTest input.pgm output.pgm");
-  }
-
-  ImageInit();
   
-  printf("# LOAD image\n");
-  InstrReset(); // to reset instrumentation
-  Image img1 = ImageLoad(argv[1]);
-  if (img1 == NULL) {
-    error(2, errno, "Loading %s: %s", argv[1], ImageErrMsg());
+  if (argc != 4) {
+    error(1, 0, "Usage: imageTest input.pgm output.pgm method(blur/locate)");
   }
-  InstrPrint(); // to print instrumentation
-  /*
-  Image img2 = ImageLoad(argv[2]);
-  if (img2 == NULL) {
-    error(2, errno, "Loading %s: %s", argv[2], ImageErrMsg());
+  if (strcmp(argv[3],"blur")==0){
+    ImageInit();
+
+    printf("# Image: %s\n", argv[1]);
+    printf("# LOAD image\n");
+    InstrReset(); // to reset instrumentation
+    Image img1 = ImageLoad(argv[1]);
+    if (img1 == NULL) {
+      error(2, errno, "Loading %s: %s", argv[1], ImageErrMsg());
+    }
+    InstrPrint(); // to print instrumentation
+    /*
+    Image img2 = ImageLoad(argv[2]);
+    if (img2 == NULL) {
+      error(2, errno, "Loading %s: %s", argv[2], ImageErrMsg());
+    }
+    InstrPrint(); // to print instrumentation
+    */
+    // Try changing the behaviour of the program by commenting/uncommenting
+    // the appropriate lines.
+    
+    //img2 = ImageCrop(img1, ImageWidth(img1)/4, ImageHeight(img1)/4, ImageWidth(img1)/2, ImageHeight(img1)/2);
+
+    /*
+    Image img2 = ImageRotate(img1);
+    if (img2 == NULL) {
+      error(2, errno, "Rotating img2: %s", ImageErrMsg());
+    }
+    */
+
+    //ImageNegative(img2);
+    //ImageThreshold(img2, 100);
+    //ImageBrighten(img2, 0.3);
+    InstrReset(); // to reset instrumentation
+    printf("# BLUR operation\n");
+    ImageBlur(img1, 20, 20);
+
+    if (ImageSave(img1, argv[2]) == 0) {
+      error(2, errno, "%s: %s", argv[2], ImageErrMsg());
+    }
+    InstrPrint(); // to print instrumentation
+    
+
+    /*
+    if (ImageLocateSubImage(img1, &x, &y, img2)) {
+      printf("# FOUND (%d,%d)\n", x, y);
+    } else {
+      printf("# NOTFOUND\n");
+    }
+    InstrPrint(); // to print instrumentation
+
+    */
+    ImageDestroy(&img1);
+    //ImageDestroy(&img2);
+    return 0;
   }
-   InstrPrint(); // to print instrumentation
-   */
-  // Try changing the behaviour of the program by commenting/uncommenting
-  // the appropriate lines.
-  
-  //img2 = ImageCrop(img1, ImageWidth(img1)/4, ImageHeight(img1)/4, ImageWidth(img1)/2, ImageHeight(img1)/2);
+  if (strcmp(argv[3],"locate")==0){
 
-  /*
-  Image img2 = ImageRotate(img1);
-  if (img2 == NULL) {
-    error(2, errno, "Rotating img2: %s", ImageErrMsg());
+
+
+
+    return 0;
   }
-  */
+  else{
 
-  //ImageNegative(img2);
-  //ImageThreshold(img2, 100);
-  //ImageBrighten(img2, 0.3);
-  ImageBlur(img1, 20, 20);
 
-  if (ImageSave(img1, argv[2]) == 0) {
-    error(2, errno, "%s: %s", argv[2], ImageErrMsg());
+    error(1, 0, "Usage: imageTest input.pgm output.pgm method(blur/locate)\nInvalid method!");
+
+
   }
-  InstrPrint(); // to print instrumentation
-  
-
- /*
-  if (ImageLocateSubImage(img1, &x, &y, img2)) {
-    printf("# FOUND (%d,%d)\n", x, y);
-  } else {
-    printf("# NOTFOUND\n");
-  }
-  InstrPrint(); // to print instrumentation
-
-  */
-  ImageDestroy(&img1);
-  //ImageDestroy(&img2);
-  
-  return 0;
 }
 
