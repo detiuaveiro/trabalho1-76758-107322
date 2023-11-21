@@ -615,8 +615,11 @@ void ImageBlur(Image img, int dx, int dy) {
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             ADDS += 1;
+
+            // Get the value of the current pixel
             cumSum[i][j] = ImageGetPixel(img, j, i);
 
+            // Add the values of the pixels above and to the left
             if (j > 0) {
                 cumSum[i][j] += cumSum[i][j - 1];
             }
@@ -625,15 +628,19 @@ void ImageBlur(Image img, int dx, int dy) {
                 cumSum[i][j] += cumSum[i - 1][j];
             }
 
+            // Subtract the intersection to avoid double addition
             if (i > 0 && j > 0) {
                 cumSum[i][j] -= cumSum[i - 1][j - 1];
             }
         }
     }
 
+    // Apply the filter
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             ADDS += 1;
+
+            // Calculate the coordinates of the rectangle
             int iMin = (i - dy > 0) ? i - dy : 0;
             int iMax = (i + dy < height - 1) ? i + dy : height - 1;
             int jMin = (j - dx > 0) ? j - dx : 0;
@@ -642,6 +649,7 @@ void ImageBlur(Image img, int dx, int dy) {
             // Calculate the area of the rectangle
             int area = (iMax - iMin + 1) * (jMax - jMin + 1);
 
+            // Calculate the sum of the pixels inside the rectangle
             double sum = cumSum[iMax][jMax];
 
             // Subtract the values of the pixels outside the rectangle
@@ -651,6 +659,8 @@ void ImageBlur(Image img, int dx, int dy) {
             if (jMin > 0) {
                 sum -= cumSum[iMax][jMin - 1];
             }
+
+            // Add the value of the intersection to avoid double subtraction
             if (iMin > 0 && jMin > 0) {
                 sum += cumSum[iMin - 1][jMin - 1];
             }
