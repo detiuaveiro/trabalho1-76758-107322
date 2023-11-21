@@ -670,23 +670,24 @@ void ImageBlurOptimized(Image img, int dx, int dy) {
             int jMin = (j - dx > 0) ? j - dx : 0;
             int jMax = (j + dx < width - 1) ? j + dx : width - 1;
 
-            int count = (iMax - iMin + 1) * (jMax - jMin + 1);
+            // Calculate the area of the rectangle
+            int area = (iMax - iMin + 1) * (jMax - jMin + 1);
 
             double sum = cumSum[iMax][jMax];
 
+            // Subtract the values of the pixels outside the rectangle
             if (iMin > 0) {
                 sum -= cumSum[iMin - 1][jMax];
             }
-
             if (jMin > 0) {
                 sum -= cumSum[iMax][jMin - 1];
             }
-
             if (iMin > 0 && jMin > 0) {
                 sum += cumSum[iMin - 1][jMin - 1];
             }
 
-            uint8 roundedValue = (uint8)(round(sum / count));
+            // Calculate the mean and round it
+            uint8 roundedValue = (uint8)(round(sum / area));
             ImageSetPixel(img, j, i, roundedValue);
         }
     }
