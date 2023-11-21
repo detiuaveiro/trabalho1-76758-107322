@@ -88,24 +88,24 @@ int main(int argc, char* argv[]) {
     ImageInit();
 
 
-    printf("# First Image: %s\n", argv[1]);
-    printf("# LOAD first image\n");
+    //printf("# First Image: %s\n", argv[1]);
+    //printf("# LOAD first image\n");
     InstrReset(); // to reset instrumentation
     Image img1 = ImageLoad(argv[1]);
     if (img1 == NULL) {
       error(2, errno, "Loading %s: %s", argv[1], ImageErrMsg());
     }
-    InstrPrint(); // to print instrumentation
+    //InstrPrint(); // to print instrumentation
 
 
-    printf("# Second Image: %s\n", argv[2]);
-    printf("# LOAD second image\n");
+    //printf("# Second Image: %s\n", argv[2]);
+    //printf("# LOAD second image\n");
     InstrReset(); // to reset instrumentation
     Image img2 = ImageLoad(argv[2]);
     if (img2 == NULL) {
       error(2, errno, "Loading %s: %s", argv[2], ImageErrMsg());
     }
-    InstrPrint(); // to print instrumentation
+    //InstrPrint(); // to print instrumentation
 
     InstrReset(); // to reset instrumentation
 
