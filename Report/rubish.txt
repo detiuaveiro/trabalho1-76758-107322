@@ -1,19 +1,29 @@
 testes LocateSubImage
 
 
-./imageTest pgm/large/einstein_940x940.pgm paste_test_1600x1200.pgm locate
-# First Image: pgm/large/einstein_940x940.pgm
-# LOAD first image
-#          time	        caltime	         memops	           adds
-       0.000752	       0.001110	         883600	              0
-# Second Image: paste_test_1600x1200.pgm
-# LOAD second image
-#          time	        caltime	         memops	           adds
-       0.000914	       0.001347	        1920000	              0
-# LOCATE operation
-# LOCATING first image in second image
-# FOUND (300,100)
-#          time	        caltime	         memops	           adds
-       0.003570	       0.005266	        1899800	         949900
+-- Imagem pequena dentro de imagem grande
+    - começando no primeiro pixel da imagem grande
+    - que acaba no ultimo pixel da imagem grande
 
 
+-- Imagem media dentro de imagem grande
+    - começando no primeiro pixel da imagem grande
+    - que acaba no ultimo pixel da imagem grande
+
+
+-- Imagem grande dentro de imagem grande
+    - começando no primeiro pixel da imagem grande
+    - que acaba no ultimo pixel da imagem grande
+
+
+-- Imagem pequena dentro de imagem media
+    - começando no primeiro pixel da imagem grande
+    - que acaba no ultimo pixel da imagem grande
+
+-- Imagem media dentro de imagem media
+    - começando no primeiro pixel da imagem grande
+    - que acaba no ultimo pixel da imagem grande
+
+-- Imagem pequena dentro de imagem pequena
+    - começando no primeiro pixel da imagem grande
+    - que acaba no ultimo pixel da imagem grande
