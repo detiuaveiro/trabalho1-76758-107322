@@ -148,8 +148,8 @@ static int check(int condition, const char* failmsg) {
 /// Currently, simply calibrate instrumentation and set names of counters.
 void ImageInit(void) { ///
   InstrCalibrate();
-  InstrName[0] = "pixmem";  // InstrCount[0] will count pixel array acesses
-  InstrName[1] = "adds";
+  InstrCount[0] = 0;  // InstrCount[0] will count pixel array acesses
+  InstrCount[1] = 0;  // InstrCount[1] will count additions
   // Name other counters here...
   
 }
@@ -463,7 +463,6 @@ Image ImageRotate(Image img) {
   Image img_rotated = ImageCreate(img->height, img->width, img->maxval);
   for (int i = 0; i < img->width; i++) {
     for (int j = 0; j < img->height; j++) {
-      printf("%d %d\n", i, j);
       ImageSetPixel(img_rotated, j, img->width - 1 - i, ImageGetPixel(img, i, j));
     }
   }
@@ -560,6 +559,7 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
   assert (ImageValidRect(img1, x, y, img2->width, img2->height));
   for (int i = 0; i < img2->height; i++) {
     for (int j = 0; j < img2->width; j++) {
+      ADDS += 1;
       if (ImageGetPixel(img1, x + j, y + i) != ImageGetPixel(img2, j, i)) {
         return 0;
       }
@@ -596,41 +596,8 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
 /// Each pixel is substituted by the mean of the pixels in the rectangle
 /// [x-dx, x+dx]x[y-dy, y+dy].
 /// The image is changed in-place.
+
 void ImageBlur(Image img, int dx, int dy) {
-    assert(img != NULL);
-    assert(dx >= 0);
-    assert(dy >= 0);
-    
-    int pixelsize = img->width * img->height;
-    Image img_copy = ImageCreate(img->width, img->height, img->maxval);
-    img_copy->pixel = (uint8*)malloc(pixelsize * sizeof(uint8));
-    memcpy(img_copy->pixel, img->pixel, pixelsize * sizeof(uint8));
-    
-    for (int i = 0; i < img->height; i++) {
-
-        for (int j = 0; j < img->width; j++) {
-            double sum = 0.0;
-            int count = 0;
-  
-            for (int k = i - dy; k <= i + dy; k++) {
-
-                for (int l = j - dx; l <= j + dx; l++) {
-                    if (ImageValidPos(img, l, k)) {
-                        sum += ImageGetPixel(img_copy, l, k);
-                        count++;
-                    }
-                }
-            }
-            
-            uint8 roundedValue = (uint8)(round(sum / count));
-            ImageSetPixel(img, j, i, roundedValue);
-        }
-    }
-    free(img_copy->pixel);
-    free(img_copy);
-}
-
-void ImageBlurOptimized(Image img, int dx, int dy) {
     assert(img != NULL);
     assert(dx >= 0);
     assert(dy >= 0);
@@ -647,6 +614,7 @@ void ImageBlurOptimized(Image img, int dx, int dy) {
     // Calculate cumulative sums
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
+            ADDS += 1;
             cumSum[i][j] = ImageGetPixel(img, j, i);
 
             if (j > 0) {
@@ -665,6 +633,7 @@ void ImageBlurOptimized(Image img, int dx, int dy) {
 
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
+            ADDS += 1;
             int iMin = (i - dy > 0) ? i - dy : 0;
             int iMax = (i + dy < height - 1) ? i + dy : height - 1;
             int jMin = (j - dx > 0) ? j - dx : 0;
@@ -697,4 +666,39 @@ void ImageBlurOptimized(Image img, int dx, int dy) {
         free(cumSum[i]);
     }
     free(cumSum);
+}
+
+
+void WorseImageBlur(Image img, int dx, int dy) {
+    assert(img != NULL);
+    assert(dx >= 0);
+    assert(dy >= 0);
+    int pixelsize = img->width * img->height;
+    Image img_copy = ImageCreate(img->width, img->height, img->maxval);
+    img_copy->pixel = (uint8*)malloc(pixelsize * sizeof(uint8));
+    memcpy(img_copy->pixel, img->pixel, pixelsize * sizeof(uint8));
+    
+    for (int i = 0; i < img->height; i++) {
+
+        for (int j = 0; j < img->width; j++) {
+            double sum = 0.0;
+            int count = 0;
+  
+            for (int k = i - dy; k <= i + dy; k++) {
+
+                for (int l = j - dx; l <= j + dx; l++) {
+                    ADDS += 1;
+                    if (ImageValidPos(img, l, k)) {
+                        sum += ImageGetPixel(img_copy, l, k);
+                        count++;
+                    }
+                }
+            }
+            
+            uint8 roundedValue = (uint8)(round(sum / count));
+            ImageSetPixel(img, j, i, roundedValue);
+        }
+    }
+    free(img_copy->pixel);
+    free(img_copy);
 }

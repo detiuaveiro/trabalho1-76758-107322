@@ -90,6 +90,9 @@ test13: $(PROGS) setup
 test14: $(PROGS) setup
 	./imageTool pgm/large/airfield-05_1600x1200.pgm crop 0,0,800,600 save crop.pgm
 
+testBLUR: $(PROGS) setup
+	./imageTest pgm/large/airfield-05_1600x1200.pgm BLUR_TEST_WITH_INFO.pgm
+
 .PHONY: tests
 tests: $(TESTS)
 
