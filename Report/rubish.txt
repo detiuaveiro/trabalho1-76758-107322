@@ -1,5 +1,13 @@
 testes LocateSubImage
 
+grande base: pgm/large/ireland_03_1600x1200.pgm
+media base: pgm/medium/mandrill_512x512.pgm
+pequena base: pgm/small/art4_300x300.pgm
+
+grande sub: pgm/large/einstein_940x940.pgm
+media sub: pgm/medium/mandrill_512x512.pgm
+pequena sub: pgm/small/bird_256x256.pgm
+
 
 -- Imagem pequena dentro de imagem grande
     - começando no primeiro pixel da imagem grande
@@ -20,9 +28,6 @@ testes LocateSubImage
     - começando no primeiro pixel da imagem grande
     - que acaba no ultimo pixel da imagem grande
 
--- Imagem media dentro de imagem media
-    - começando no primeiro pixel da imagem grande
-    - que acaba no ultimo pixel da imagem grande
 
 -- Imagem pequena dentro de imagem pequena
     - começando no primeiro pixel da imagem grande
