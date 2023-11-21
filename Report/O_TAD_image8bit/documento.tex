@@ -20,31 +20,42 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{geometry} 
+\usepackage{titlesec}
+
+\titleformat{\chapter}[display]
+  {\normalfont\bfseries}{}{0pt}{\Huge}
 
 \geometry{lmargin=2.5cm,rmargin=2.5cm,bmargin=3cm,tmargin=2.5cm} 
-\definecolor{mGreen}{rgb}{0,0.6,0}
-\definecolor{mGray}{rgb}{0.5,0.5,0.5}
-\definecolor{mPurple}{rgb}{0.58,0,0.82}
-\definecolor{backgroundColour}{rgb}{0.95,0.95,0.92}
+
+\definecolor{codebackground}{rgb}{0.95,0.95,0.92}
+\definecolor{codegreen}{rgb}{0,0.75,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.95}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{codestring}{rgb}{0.82,0.1,0.26}
+\definecolor{darkgreen}{rgb}{0,0.35,0}
+
 \lstdefinestyle{CStyle}{
-    backgroundcolor=\color{backgroundColour},   
-    commentstyle=\color{mGreen},
-    keywordstyle=\color{magenta},
-    numberstyle=\tiny\color{mGray},
-    stringstyle=\color{mPurple},
-    basicstyle=\footnotesize,
-    breakatwhitespace=false,         
-    breaklines=true,                 
-    captionpos=b,                    
-    keepspaces=true,                 
-    numbers=left,                    
-    numbersep=5pt,                  
-    showspaces=false,                
+    backgroundcolor=\color{codebackground},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codestring},
+    basicstyle=\ttfamily\small,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
     showstringspaces=false,
-    showtabs=false,                  
-    tabsize=2,
-    language=C
+    showtabs=false,
+    tabsize=4,
+    language=C,
+    emph={uint8, Image},
+    emphstyle=\color{darkgreen}
 }
+
 \lstset{style=CStyle}
 
 
@@ -72,7 +83,7 @@
 
 \begin{center}
 %
-\vspace*{50mm}
+\vspace{50mm}
 %
 {\Huge\textbf{\titulo}}\\
 {\Large \departamento\\ \empresa}\\
@@ -130,61 +141,20 @@ O array de pixeis é um array de unsigned char, em que cada posição do array r
 \par
 A estrutura de dados image8bit é definida da seguinte forma:
 
-\begin{lstlisting}
-typedef struct image8bit {
-    unsigned char *data;
-    int width;
-    int height;
-    int num_pixels;
-} *Image8bit;
+\begin{lstlisting}[language=C]
+struct image {
+  int width;
+  int height;
+  int maxval;   // maximum gray value (pixels with maxval are pure WHITE)
+  uint8* pixel; // pixel data (a raster scan)
+};
 \end{lstlisting}
 
 
-\section{Função G(img,x,y)}
 
-A função G(img,x,y) transforma as coordenadas (x,y) da imagem num índice do array linear que representa a imagem e é usada pelas funções image8bitGetPixel(...) e image8bitSetPixel(...).
-\par
-
-\par
-A função é definida da seguinte forma:
-
-\begin{lstlisting}
-static inline int G(Image img, int x, int y) {
-    int index;
-    index = y*img->width + x;
-    assert (0 <= index && index < img->width*img->height);
-    return index;
-}
-\end{lstlisting}
-
-\section{Função image8bitGetPixel(...)}
-A função image8bitGetPixel(img,x,y) devolve o valor do pixel (x,y) da imagem img.
-\par
-
-A função é definida da seguinte forma:
-\begin{lstlisting}
-uint8 ImageGetPixel(Image img, int x, int y) {
-    assert (img != NULL);
-    assert (ImageValidPos(img, x, y));
-    PIXMEM += 1;  // count one pixel access (read)
-    return img->pixel[G(img, x, y)];  
-} 
-\end{lstlisting}
-
-\section{Função image8bitSetPixel(...)}
-A função image8bitSetPixel(img,x,y,level) altera o valor do pixel (x,y) da imagem img para o valor level.
-\par
-\begin{lstlisting}
-void ImageSetPixel(Image img, int x, int y, uint8 level) {
-    assert (img != NULL);
-    assert (ImageValidPos(img, x, y));
-    PIXMEM += 1;  // count one pixel access (store)
-    img->pixel[G(img, x, y)] = level;
-} 
-\end{lstlisting}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Apresentação e Análise da Complexidade Computacional das Funções ImageLocateSubImage(...) e ImageBlur(...)}
+\chapter{Apresentação e Análise da Complexidade Computacional das Funções}
 
 \section{Função ImageLocateSubImage(...)}
 \subsection{Apresentação}
@@ -197,26 +167,26 @@ Para verificar se a subimagem se encontra nessa posição, a função percorre a
 Divindo a função em duas partes, a primeira parte percorre a imagem dada e a segunda parte percorre a subimagem, a complexidade computacional da função é dada por !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 \par
 \begingroup
-\begin{lstlisting}
-    int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
-        assert (img1 != NULL);
-        assert (img2 != NULL);
-        assert (px != NULL);
-        assert (py != NULL);
-        for (int i = 0; i < img1->height - img2->height; i++) {
-            for (int j = 0; j < img1->width - img2->width; j++) {
-                if (ImageMatchSubImage(img1, j, i, img2)) {
-                    *px = j;
-                    *py = i;
-                    return 1;
-                }
+\begin{lstlisting}[language=C]
+int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
+    assert (img1 != NULL);
+    assert (img2 != NULL);
+    assert (px != NULL);
+    assert (py != NULL);
+    for (int i = 0; i < img1->height - img2->height; i++) {
+        for (int j = 0; j < img1->width - img2->width; j++) {
+            if (ImageMatchSubImage(img1, j, i, img2)) {
+                *px = j;
+                *py = i;
+                return 1;
             }
         }
-        return 0;
     }
-    \end{lstlisting}
+    return 0;
+}
+\end{lstlisting}
     
-\begin{lstlisting}
+\begin{lstlisting}[language=C]
 int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
   assert (img1 != NULL);
   assert (img2 != NULL);
@@ -233,18 +203,6 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
 }
 \end{lstlisting}
 \endgroup
-
-\subsection{Dados Experimentais}
-
-\tab A função ImageLocateSubImage(...) foi testada com 3 imagens base e 3 subimagens.
-\par
-As imagens base são imagens têm as dimensões (300x300), (765x460) e (1200x1600), e as subimagens têm as dimensões (222x217), (512x512) e (940x940).
-\par
-
-
-
-\subsection{Análise}
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

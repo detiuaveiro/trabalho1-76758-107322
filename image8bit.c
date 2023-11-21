@@ -557,9 +557,12 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
   assert (img2 != NULL);
   assert (ImageValidPos(img1, x, y));
   assert (ImageValidRect(img1, x, y, img2->width, img2->height));
+
+  // Compare the pixels of the subimage with the pixels of the image
   for (int i = 0; i < img2->height; i++) {
     for (int j = 0; j < img2->width; j++) {
       ADDS += 1;
+      // If the pixels are different, return 0, co
       if (ImageGetPixel(img1, x + j, y + i) != ImageGetPixel(img2, j, i)) {
         return 0;
       }
