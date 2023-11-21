@@ -115,7 +115,9 @@ void InstrPrint(void) { ///
   double time = cpu_time() - InstrTime;
   // compute time in calibrated time units:
   double caltime = time / InstrCTU;
-
+  InstrName[0] = "memops";
+  InstrName[1] = "adds";
+  
   printf("#%14.15s\t%15.15s", "time", "caltime");
   for (int i = 0; i < NUMCOUNTERS; i++)
     if (InstrName[i] != NULL)
