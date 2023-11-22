@@ -124,9 +124,9 @@
 
 Neste relatório é apresentado o trabalho prático realizado no âmbito da unidade curricular de Algoritmos e Estruturas de Dados, com dois objetivos principais.
 \par
-O primeiro é desenvolver desenvolver e testar o TAD (Tipo Abstrato de Dados) image8bit, que permite manipular imagens de 8 bits com com níveis de cinzento, em que cada pixel pode tomar valores de intensidade entre 0 e 255.
+O primeiro é desenvolver desenvolver e testar o TAD (Tipo Abstrato de Dados) \texttt{image8bit}, que permite manipular imagens de 8 bits com com níveis de cinzento, em que cada pixel pode tomar valores de intensidade entre 0 e 255.
 \par
-O segundo é analisar a complexidade computacional da função ImageLocateSubImage(...) que permite determinar, caso exista, a localização de uma subimagem numa imagem dada, e da função ImageBlur(…) que aplica um filtro a uma imagem e a torna baça.
+O segundo é analisar a complexidade computacional da função \texttt{ImageLocateSubImage} que permite determinar, caso exista, a localização de uma subimagem numa imagem dada, e da função ImageBlur(…) que aplica um filtro a uma imagem e a torna baça.
 
 
 
@@ -135,11 +135,11 @@ O segundo é analisar a complexidade computacional da função ImageLocateSubIma
 
 \section{Estrutura de Dados image8bit}
 
-A estrutura de dados image8bit é composta por um ponteiro para um array de pixeis, um inteiro que representa a largura da imagem, um inteiro que representa a altura da imagem e um inteiro que representa o número de pixeis da imagem.
+A estrutura de dados \texttt{image8bit} é composta por um ponteiro para um array de pixeis, um inteiro que representa a largura da imagem, um inteiro que representa a altura da imagem e um inteiro que representa o número de pixeis da imagem.
 \par
-O array de pixeis é um array de unsigned char, em que cada posição do array representa um pixel da imagem, e cada pixel pode tomar valores de intensidade entre 0 e 255. A posição do pixel (x,y) no array é dada por x + y * (largura da imagem).
+O array de pixeis é um array de unsigned char, em que cada posição do array representa um pixel da imagem, e cada pixel pode tomar valores de intensidade entre 0 e 255. A posição do pixel (\(x\),\(y\)) no array é dada por \(x\) + \(y\) * (\textit{largura da imagem}).
 \par
-A estrutura de dados image8bit é definida da seguinte forma:
+A estrutura de dados \texttt{image8bit} é definida da seguinte forma:
 
 \begin{lstlisting}[language=C]
 struct image {
@@ -156,15 +156,14 @@ struct image {
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{Apresentação e Análise da Complexidade Computacional das Funções}
 
-\section{Função ImageLocateSubImage(...)}
+\section{Analise da complexidade da função ImageLocateSubImage}
 \subsection{Apresentação}
 
-A função ImageLocateSubImage(...) permite determinar, caso exista, a localização de uma subimagem numa imagem dada.
+A função \texttt{ImageMatchSubImage} permite determinar, caso exista, a localização de uma subimagem numa imagem dada.
 \par
 Para determinar a localização da subimagem, a função percorre a imagem dada e, para cada pixel da imagem, verifica se a subimagem se encontra nessa posição. 
 Para verificar se a subimagem se encontra nessa posição, a função percorre a subimagem e verifica se os pixeis da subimagem são iguais aos pixeis da imagem na posição (x,y) da imagem.
-\par
-Divindo a função em duas partes, a primeira parte percorre a imagem dada e a segunda parte percorre a subimagem, a complexidade computacional da função é dada por !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+Por este motivo, podemos fazer a análise da complexidade para cada função.
 \par
 \begingroup
 \begin{lstlisting}[language=C]
@@ -204,14 +203,172 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
 \end{lstlisting}
 \endgroup
 
+\subsection{Análise Formal da Complexidade}
+
+\subsubsection{ImageMatchSubImage}
+A função \texttt{ImageMatchSubImage} tem uma complexidade de \(O(h \cdot w)\), pois itera por cada pixel da subimagem, 
+sendo \(h\) e \(w\) a altura e largura da subimagem, respetivamente.
+
+\subsubsection{Complexidade da Função ImageLocateSubImage}
+
+\subsubsection{Melhor Caso}
+Se a subimagem for encontrada na primeira posição, a função \texttt{ImageMatchSubImage} será chamada apenas uma vez. 
+Portanto, a complexidade no melhor caso é \(O(h \cdot w)\), escalando o tempo de execução, linearmente, com o tamanho da subimagem.
+
+\subsubsection{Pior Caso}
+No pior caso, os ciclos aninhados iteram sobre todas as posições possíveis dentro da imagem, 
+resultando em \((n-h) \cdot (m-w)\) chamadas a \texttt{ImageMatchSubImage}, com \(n\) e \(m\) a altura e largura da imagem, respetivamente. 
+Cada chamada a \texttt{ImageMatchSubImage} tem uma complexidade de \(O(h \cdot w)\).
+Portanto, a complexidade no pior caso é \(O((n-h) \cdot (m-w) \cdot h \cdot w)\), escalando o tempo de execução, quadraticamente, 
+com o tamanho da imagem e da subimagem.
+
+\subsection{Testes Experimentais}
+
+
+\subsection{Conclusões}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Analise da complexidade da função ImageBlur}
+
+\subsection{Apresentação}
+Esta função aplica um filtro a uma imagem e a torna baça, tomando como argumentos a imagem e o tamanho do filtro, dado por \(dx\) e \(dy\).
+\par
+Para calcular o valor de cada pixel da imagem resultante, a função percorre a imagem e, para cada pixel,
+calcula a média dos valores dos pixeis da imagem original que se encontram dentro do filtro. Por forma a reduzir a complexidade computacional,
+a função \texttt{ImageBlur} utiliza uma matriz auxiliar \texttt{cumSum} que guarda a soma cumulativa dos pixeis anteriores.
+\par
+Depois de calculada a matriz auxiliar, aplicamos o filtro calculando a média dos valores dos pixeis da imagem original que se encontram dentro do filtro.
+\par
+A complexidade da função depende apenas do tamanho da imagem, dado que o filtro é calculado percorrendo o array \texttt{cumSum} 
+que tem o mesmo tamanho da imagem.
+\par
+A função \texttt{ImageBlur} é definida da seguinte forma:
+
+\begingroup
+\begin{lstlisting}[language=C]
+  void ImageBlur(Image img, int dx, int dy) {
+    assert(img != NULL);
+    assert(dx >= 0);
+    assert(dy >= 0);
+
+    int width = img->width;
+    int height = img->height;
+
+    // Create an array to store cumulative sums
+    double** cumSum = (double**)malloc(height * sizeof(double*));
+    for (int i = 0; i < height; i++) {
+        cumSum[i] = (double*)malloc(width * sizeof(double));
+    }
+
+    // Calculate cumulative sums
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            ADDS += 1;
+
+            // Get the value of the current pixel
+            cumSum[i][j] = ImageGetPixel(img, j, i);
+
+            // Add the values of the pixels above and to the left
+            if (j > 0) {
+                cumSum[i][j] += cumSum[i][j - 1];
+            }
+
+            if (i > 0) {
+                cumSum[i][j] += cumSum[i - 1][j];
+            }
+
+            // Subtract the intersection to avoid double addition
+            if (i > 0 && j > 0) {
+                cumSum[i][j] -= cumSum[i - 1][j - 1];
+            }
+        }
+    }
+
+    // Apply the filter
+    for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            ADDS += 1;
+
+            // Calculate the coordinates of the rectangle
+            int iMin = (i - dy > 0) ? i - dy : 0;
+            int iMax = (i + dy < height - 1) ? i + dy : height - 1;
+            int jMin = (j - dx > 0) ? j - dx : 0;
+            int jMax = (j + dx < width - 1) ? j + dx : width - 1;
+
+            // Calculate the area of the rectangle
+            int area = (iMax - iMin + 1) * (jMax - jMin + 1);
+
+            // Calculate the sum of the pixels inside the rectangle
+            double sum = cumSum[iMax][jMax];
+
+            // Subtract the values of the pixels outside the rectangle
+            if (iMin > 0) {
+                sum -= cumSum[iMin - 1][jMax];
+            }
+            if (jMin > 0) {
+                sum -= cumSum[iMax][jMin - 1];
+            }
+
+            // Add the value of the intersection to avoid double subtraction
+            if (iMin > 0 && jMin > 0) {
+                sum += cumSum[iMin - 1][jMin - 1];
+            }
+
+            // Calculate the mean and round it
+            uint8 roundedValue = (uint8)(round(sum / area));
+            ImageSetPixel(img, j, i, roundedValue);
+        }
+    }
+
+    // Free the allocated memory
+    for (int i = 0; i < height; i++) {
+        free(cumSum[i]);
+    }
+    free(cumSum);
+    
+}
+\end{lstlisting}
+\endgroup
+
+\subsection{Análise Formal da Complexidade}
+
+\subsubsection{Complexidade Temporal}
+
+\subsubsection{Inicialização da Matriz de Soma Cumulativa}
+A inicialização da matriz de soma cumulativa tem uma complexidade de \(O(n \cdot m)\), pois itera por cada pixel da imagem,
+dentro de dois ciclos aninhados, sendo \(n\) e \(m\) a altura e largura da imagem, respetivamente.
+
+\subsubsection{Aplicação do Filtro}
+A aplicação do filtro tem uma complexidade de \(O(n \cdot m)\), pois itera por cada posição da imagem, da mesma forma que a inicialização 
+da matriz de soma cumulativa. Logo, a complexidade temporal da função \texttt{ImageBlur} é \(O(n \cdot m)\).
+\par
+Portanto, a complexidade temporal global da função \texttt{ImageBlur} é \(O(n \cdot m)\), considerando que o fator que contribui mais para a complexidade 
+é a dimensão da imagem. Isto quer dizer que o desempenho da função \texttt{ImageBlur} é linear em relação à dimensão da imagem.
+
+
+\subsubsection{Complexidade Espacial}
+
+\subsubsection{Matriz de Soma Cumulativa}
+A matriz de soma cumulativa tem uma complexidade de \(O(n \cdot m)\), pois aloca memória para uma matriz de \(n\) linhas e \(m\) colunas, 
+dando uma complexidade espacial de \(O(n \cdot m)\), sendo \(n\) e \(m\) a altura e largura da imagem, respetivamente.
+
+\subsubsection{Outras Variáveis}
+As outras variáveis e índices de ciclo têm um espaço constante e não escalam com o tamanho da imagem, não contribuindo para o escalamento da 
+complexidade espacial.
+
+Sumarizando, a complexidade espacial global da função \texttt{ImageBlur} é \(O(n \cdot m)\).
+
+\subsection{Testes Experimentais}
+
+\subsection{Conclusões}
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Conclusões}
 
 
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \printbibliography
 

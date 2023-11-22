@@ -56,15 +56,20 @@ int main(int argc, char* argv[]) {
     //ImageNegative(img2);
     //ImageThreshold(img2, 100);
     //ImageBrighten(img2, 0.3);
-    InstrReset(); // to reset instrumentation
-    printf("# BLUR operation\n");
-    ImageBlur(img1, 20, 20);
+    //InstrReset(); // to reset instrumentation
+    int levels[5] = {0, 1, 5, 10, 100};
 
-    if (ImageSave(img1, argv[2]) == 0) {
-      error(2, errno, "%s: %s", argv[2], ImageErrMsg());
+    printf("# BLUR operations of %s\n", argv[1]);
+    for (int i = 0; i < 5; i++) {
+      InstrReset(); // to reset instrumentation
+      printf("# BLUR level %d\n", levels[i]);
+      ImageBlur(img1, levels[i], levels[i]);
+
+      if (ImageSave(img1, argv[2]) == 0) {
+        error(2, errno, "%s: %s", argv[2], ImageErrMsg());
+      }
+      InstrPrint(); // to print instrumentation
     }
-    InstrPrint(); // to print instrumentation
-    
 
     /*
     if (ImageLocateSubImage(img1, &x, &y, img2)) {

@@ -32,3 +32,105 @@ pequena sub: pgm/small/bird_256x256.pgm
 -- Imagem pequena dentro de imagem pequena
     - começando no primeiro pixel da imagem grande
     - que acaba no ultimo pixel da imagem grande
+
+
+testes ImageBlur
+
+imagem pequena: pgm/small/bird_256x256.pgm
+imagem media: pgm/medium/mandrill_512x512.pgm
+imagem grande 1: pgm/large/einstein_940x940.pgm
+imagem grande 2: pgm/large/ireland_03_1600x1200.pgm
+
+niveis de blur x*x:
+    x = 0
+    x = 1
+    x = 2
+    x = 100
+    
+
+# Image: pgm/small/bird_256x256.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.000060	       0.000091	          65536	              0
+# BLUR operations of pgm/small/bird_256x256.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.001066	       0.001617	         196608	         131072
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.001286	       0.001950	         196608	         131072
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.003052	       0.004629	         196608	         131072
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       0.003037	       0.004607	         196608	         131072
+# BLUR level 100
+#          time	        caltime	         memops	           adds
+       0.002946	       0.004468	         196608	         131072
+
+
+# Image: pgm/medium/mandrill_512x512.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.000976	       0.001447	         262144	              0
+# BLUR operations of pgm/medium/mandrill_512x512.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.006272	       0.009305	         786432	         524288
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.004705	       0.006980	         786432	         524288
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.003729	       0.005533	         786432	         524288
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       0.003688	       0.005472	         786432	         524288
+# BLUR level 100
+#          time	        caltime	         memops	           adds
+       0.003639	       0.005399	         786432	         524288
+
+
+# Image: pgm/large/einstein_940x940.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.000720	       0.001078	         883600	              0
+# BLUR operations of pgm/large/einstein_940x940.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.012961	       0.019409	        2650800	        1767200
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.015503	       0.023216	        2650800	        1767200
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.017395	       0.026050	        2650800	        1767200
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       0.012389	       0.018554	        2650800	        1767200
+# BLUR level 100
+#          time	        caltime	         memops	           adds
+       0.012489	       0.018703	        2650800	        1767200
+       
+
+# Image: pgm/large/ireland_03_1600x1200.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.000977	       0.001474	        1920000	              0
+# BLUR operations of pgm/large/ireland_03_1600x1200.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.034541	       0.052110	        5760000	        3840000
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.035604	       0.053714	        5760000	        3840000
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.034155	       0.051527	        5760000	        3840000
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       0.030031	       0.045306	        5760000	        3840000
+# BLUR level 100
+#          time	        caltime	         memops	           adds
+       0.029878	       0.045076	        5760000	        3840000

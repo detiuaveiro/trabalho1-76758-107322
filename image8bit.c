@@ -679,6 +679,7 @@ void ImageBlur(Image img, int dx, int dy) {
         free(cumSum[i]);
     }
     free(cumSum);
+    
 }
 
 
@@ -686,6 +687,7 @@ void WorseImageBlur(Image img, int dx, int dy) {
     assert(img != NULL);
     assert(dx >= 0);
     assert(dy >= 0);
+    
     int pixelsize = img->width * img->height;
     Image img_copy = ImageCreate(img->width, img->height, img->maxval);
     img_copy->pixel = (uint8*)malloc(pixelsize * sizeof(uint8));
