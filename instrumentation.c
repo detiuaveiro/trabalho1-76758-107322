@@ -33,7 +33,6 @@ double cpu_time(void) ; ///
 //
 
 #include <time.h>
-#include <linux/time.h>
 
 double cpu_time(void) {
   struct timespec current_time;
