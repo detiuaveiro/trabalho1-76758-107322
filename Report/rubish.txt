@@ -135,3 +135,4 @@ niveis de blur x*x:
 # BLUR level 100
 #          time	        caltime	         memops	           adds
        0.029878	       0.045076	        5760000	        3840000
+       
