@@ -562,7 +562,7 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
   for (int i = 0; i < img2->height; i++) {
     for (int j = 0; j < img2->width; j++) {
       ADDS += 1;
-      // If the pixels are different, return 0, co
+      // If the pixels are different, return 0, continuing the search
       if (ImageGetPixel(img1, x + j, y + i) != ImageGetPixel(img2, j, i)) {
         return 0;
       }
@@ -580,8 +580,11 @@ int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
   assert (img2 != NULL);
   assert (px != NULL);
   assert (py != NULL);
+
+  // Search for the subimage in the image
   for (int i = 0; i <= img1->height - img2->height; i++) {
-    for (int j = 0; j <= img1->width - img2->width; j++) { 
+    for (int j = 0; j <= img1->width - img2->width; j++) {
+      // If the subimage is found, set the position and end the search
       if (ImageMatchSubImage(img1, j, i, img2)) {
         *px = j;
         *py = i;
