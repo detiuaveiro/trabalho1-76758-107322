@@ -84,7 +84,7 @@
 
 \begin{center}
 %
-\vspace{50mm}
+\vspace*{50mm}
 %
 {\Huge\textbf{\titulo}}\\
 {\Large \departamento\\ \empresa}\\
@@ -224,6 +224,8 @@ Portanto, a complexidade no pior caso é \(O((n-h) \cdot (m-w) \cdot h \cdot w)\
 com o tamanho da imagem e da subimagem.
 
 \subsection{Testes Experimentais}
+
+
 
 
 \subsection{Conclusões}
@@ -426,7 +428,103 @@ Em suma, a complexidade espacial global da função \texttt{ImageBlur} é \(O(n 
 
 \subsection{Conclusões}
 
+Conseguimos confirmar que se verifica experimentalmente, aquilo que se esperava pela análise formal da complexidade. O número a complexidade, dada por \(adds\), escala linearmente com o tamanho da imagem. Conseguimos determinar \(adds\) pela multiplicação de \(image\char`_height\) por \(image\char`_length\), por exemplo para a imagem \texttt{instein\char`_940x940.pgm} temos \texttt{$adds = 940*940 = 1767200$}.
+\par
+Verifica-se também que a intensidade de \(blur\), não impacta em nada o desempenho da função, sendo igual o número de \(memops\) e \(adds\) para todos os níveis de intensidade.
 
+
+\section{Análise da complexidade da função ImageWorstBlur}
+
+\subsection{Apresentação}
+Para aprensentar uma função menos eficiente, criamos a função \texttt{ImageWorstBlur}, onde o filtro é calculado sem utilizar a matriz auxiliar,
+calculando a média dos valores do filtro a cada iteração, percorrendo a imagem original e o filtro.
+\par
+A função \texttt{ImageWorstBlur} é definida da seguinte forma:
+
+\begingroup
+\begin{lstlisting}[language=C]
+void WorseImageBlur(Image img, int dx, int dy) {
+  assert(img != NULL);
+  assert(dx >= 0);
+  assert(dy >= 0);
+  
+  // Create a copy of the image
+  int pixelsize = img->width * img->height;
+  Image img_copy = ImageCreate(img->width, img->height, img->maxval);
+  img_copy->pixel = (uint8*)malloc(pixelsize * sizeof(uint8));
+  memcpy(img_copy->pixel, img->pixel, pixelsize * sizeof(uint8));
+  
+  // Apply the filter
+  for (int i = 0; i < img->height; i++) {
+      for (int j = 0; j < img->width; j++) {
+          double sum = 0.0;
+          int count = 0;
+          // Calculate the coordinates of the rectangle
+          for (int k = i - dy; k <= i + dy; k++) {
+              for (int l = j - dx; l <= j + dx; l++) {
+                  ADDS += 1;
+                  // Check if the pixel is inside the image
+                  if (ImageValidPos(img, l, k)) {
+                    // Add the value of the pixel to the sum
+                    sum += ImageGetPixel(img_copy, l, k);
+                    count++;
+                  }
+              }
+          }
+
+          // Calculate the mean and round it
+          uint8 roundedValue = (uint8)(round(sum / count));
+          ImageSetPixel(img, j, i, roundedValue);
+      }
+  }
+  // Free the allocated memory
+  free(img_copy->pixel);
+  free(img_copy);
+}
+\end{lstlisting}
+\endgroup
+
+\subsection{Análise Formal da Complexidade}
+
+\subsubsection{Complexidade Temporal}
+
+\subsubsection{Cópia da Imagem}
+A cópia da imagem tem uma complexidade de \(O(n \cdot m)\), onde \(n\) e \(m\) são a altura e largura da imagem, respetivamente.
+
+\subsubsection{Aplicação do Filtro}
+A aplicação do filtro tem uma complexidade de \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\), 
+onde \(n\) e \(m\) são a altura e largura da imagem, respetivamente, 
+\(dx\) e \(dy\) são a largura e altura do filtro, respetivamente.
+\par
+O loop externo itera sobre a altura da imagem (\(n\)) e o loop interno itera sobre a largura da imagem (\(m\)).
+\par
+Para cada pixel, há um loop adicional que itera sobre uma região retangular de tamanho \((2 \cdot dy + 1) \cdot (2 \cdot dx + 1)\).
+\par
+Portanto, a complexidade temporal geral da função \texttt{WorseImageBlur} é \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\), 
+qe aumenta quadraticamente com o tamanho da imagem e do filtro.
+
+
+\subsubsection{Complexidade Espacial}
+
+\subsubsection{Cópia da Imagem}
+A complexidade espacial para copiar a imagem é \(O(n \cdot m)\) para a imagem copiada.
+
+\subsubsection{Outras Variáveis}
+O espaço necessário para outras variáveis e índices de loop é constante e não escala com o tamanho de entrada.
+
+\subsubsection{}
+Em suma, a complexidade espacial da função \texttt{WorseImageBlur} é \(O(n \cdot m)\), que aumenta linearmente com o tamanho da imagem.
+
+\subsubsection{}
+Em suma, a complexidade temporal da função \texttt{WorseImageBlur} é \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\),
+e a complexidade espacial é \(O(n \cdot m)\). A complexidade temporal dessa função é significativamente maior do que a da função original \texttt{ImageBlur},
+especialmente devido aos loops aninhados para a cópia e à região considerada para a aplicação do filtro.
+
+
+\subsection{Testes Experimentais}
+
+
+\subsection{Conclusões}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
