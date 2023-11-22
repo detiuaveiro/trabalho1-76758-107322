@@ -91,17 +91,17 @@ test13: $(PROGS) setup
 test14: $(PROGS) setup
 	./imageTool pgm/large/airfield-05_1600x1200.pgm crop 0,0,800,600 save crop.pgm
 
-testBLURs: $(PROGS) setup
-	./imageTest pgm/small/bird_256x256.pgm BLUR_TEST_WITH_INFO.pgm blur
+#testBLURs: $(PROGS) setup
+#	./imageTest pgm/small/bird_256x256.pgm BLUR_TEST_WITH_INFO.pgm blur
 
-testBLURm: $(PROGS) setup
-	./imageTest pgm/medium/mandrill_512x512.pgm BLUR_TEST_WITH_INFO.pgm blur
+#testBLURm: $(PROGS) setup
+#	./imageTest pgm/medium/mandrill_512x512.pgm BLUR_TEST_WITH_INFO.pgm blur
 
-testBLURl1: $(PROGS) setup
-	./imageTest pgm/large/einstein_940x940.pgm BLUR_TEST_WITH_INFO.pgm blur
+#testBLURl1: $(PROGS) setup
+#	./imageTest pgm/large/einstein_940x940.pgm BLUR_TEST_WITH_INFO.pgm blur
 
-testBLURl2: $(PROGS) setup
-	./imageTest pgm/large/ireland_03_1600x1200.pgm BLUR_TEST_WITH_INFO.pgm blur
+#testBLURl2: $(PROGS) setup
+#	./imageTest pgm/large/ireland_03_1600x1200.pgm BLUR_TEST_WITH_INFO.pgm blur
 
 test_to_paste: $(PROGS) setup
 	./imageTool pgm/large/einstein_940x940.pgm pgm/large/airfield-05_1600x1200.pgm paste 300,100 save paste_test_1600x1200.pgm
@@ -110,7 +110,7 @@ testLOCATE: $(PROGS) setup
 	./imageTool pgm/large/einstein_940x940.pgm pgm/large/airfield-05_1600x1200.pgm paste 300,100 save paste_test_1600x1200.pgm
 	./imageTest pgm/large/einstein_940x940.pgm paste_test_1600x1200.pgm locate
 
-testREPORTlocate: $(PROGS) setup
+testREPORTpaste: $(PROGS) setup
 	./imageTool pgm/small/bird_256x256.pgm pgm/large/ireland_03_1600x1200.pgm paste 0,0 save report_images/pequena_em_grande_1600x1200.pgm
 	./imageTool pgm/medium/mandrill_512x512.pgm pgm/large/ireland_03_1600x1200.pgm paste 0,0 save report_images/media_em_grande_1600x1200.pgm
 	./imageTool pgm/large/einstein_940x940.pgm pgm/large/ireland_03_1600x1200.pgm paste 0,0 save report_images/grande_em_grande_1600x1200.pgm
@@ -124,7 +124,7 @@ testREPORTlocate: $(PROGS) setup
 	./imageTool pgm/small/bird_256x256.pgm pgm/small/art4_300x300.pgm paste 44,44 save report_images/pequena_em_pequena_2_300x300.pgm
 
 
-testREPORTlocate2: $(PROGS) setup
+testREPORTlocate: $(PROGS) setup
 	./imageTest pgm/small/bird_256x256.pgm report_images/pequena_em_grande_1600x1200.pgm locate
 	./imageTest pgm/medium/mandrill_512x512.pgm report_images/media_em_grande_1600x1200.pgm locate
 	./imageTest pgm/large/einstein_940x940.pgm report_images/grande_em_grande_1600x1200.pgm locate
@@ -136,6 +136,18 @@ testREPORTlocate2: $(PROGS) setup
 	./imageTest pgm/large/einstein_940x940.pgm report_images/grande_em_grande_2_1600x1200.pgm locate
 	./imageTest pgm/small/bird_256x256.pgm report_images/pequena_em_media_2_512x512.pgm locate
 	./imageTest pgm/small/bird_256x256.pgm report_images/pequena_em_pequena_2_300x300.pgm locate
+
+testREPORTblur: $(PROGS) setup
+	./imageTest pgm/small/bird_256x256.pgm report_images/blur_s_256x256.pgm blur
+	./imageTest pgm/medium/mandrill_512x512.pgm report_images/blur_m_512x512.pgm blur
+	./imageTest pgm/large/einstein_940x940.pgm report_images/blur_l_940x940.pgm blur
+	./imageTest pgm/large/ireland_03_1600x1200.pgm report_images/blur_l2_1600x1200.pgm blur
+
+testREPORTworseblur: $(PROGS) setup
+	./imageTest pgm/small/bird_256x256.pgm report_images/worse_blur_s_256x256.pgm worseblur
+	./imageTest pgm/medium/mandrill_512x512.pgm report_images/worse_blur_m_512x512.pgm worseblur
+	./imageTest pgm/large/einstein_940x940.pgm report_images/worse_blur_l_940x940.pgm worseblur
+	./imageTest pgm/large/ireland_03_1600x1200.pgm report_images/worse_blur_l2_1600x1200.pgm worseblur
 
 ##############
 
