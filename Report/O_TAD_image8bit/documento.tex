@@ -21,6 +21,7 @@
 \usepackage{xcolor}
 \usepackage{geometry} 
 \usepackage{titlesec}
+\usepackage{booktabs}
 
 \titleformat{\chapter}[display]
   {\normalfont\bfseries}{}{0pt}{\Huge}
@@ -205,7 +206,7 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
 
 \subsection{Análise Formal da Complexidade}
 
-\subsubsection{ImageMatchSubImage}
+\subsubsection*{ImageMatchSubImage}
 A função \texttt{ImageMatchSubImage} tem uma complexidade de \(O(h \cdot w)\), pois itera por cada pixel da subimagem, 
 sendo \(h\) e \(w\) a altura e largura da subimagem, respetivamente.
 
@@ -343,6 +344,7 @@ dentro de dois ciclos aninhados, sendo \(n\) e \(m\) a altura e largura da image
 A aplicação do filtro tem uma complexidade de \(O(n \cdot m)\), pois itera por cada posição da imagem, da mesma forma que a inicialização 
 da matriz de soma cumulativa. Logo, a complexidade temporal da função \texttt{ImageBlur} é \(O(n \cdot m)\).
 \par
+\subsubsection{}
 Portanto, a complexidade temporal global da função \texttt{ImageBlur} é \(O(n \cdot m)\), considerando que o fator que contribui mais para a complexidade 
 é a dimensão da imagem. Isto quer dizer que o desempenho da função \texttt{ImageBlur} é linear em relação à dimensão da imagem.
 
@@ -356,10 +358,107 @@ dando uma complexidade espacial de \(O(n \cdot m)\), sendo \(n\) e \(m\) a altur
 \subsubsection{Outras Variáveis}
 As outras variáveis e índices de ciclo têm um espaço constante e não escalam com o tamanho da imagem, não contribuindo para o escalamento da 
 complexidade espacial.
-
-Sumarizando, a complexidade espacial global da função \texttt{ImageBlur} é \(O(n \cdot m)\).
+\par
+\subsubsection*{}
+Em suma, a complexidade espacial global da função \texttt{ImageBlur} é \(O(n \cdot m)\).
 
 \subsection{Testes Experimentais}
+
+\subsection*{Image: pgm/small/bird\_256x256.pgm}
+
+\subsubsection*{Carregar imagem}
+\begin{tabular}{cccc}
+\toprule
+\textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+\midrule
+0.000060 & 0.000091 & 65536 & 0 \\
+\bottomrule
+\end{tabular}
+
+\subsubsection*{Operações BLUR}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+\midrule
+0 & 0.001066 & 0.001617 & 196608 & 131072 \\
+1 & 0.001286 & 0.001950 & 196608 & 131072 \\
+5 & 0.003052 & 0.004629 & 196608 & 131072 \\
+10 & 0.003037 & 0.004607 & 196608 & 131072 \\
+100 & 0.002946 & 0.004468 & 196608 & 131072 \\
+\bottomrule
+\end{tabular}
+
+\subsection*{Image: pgm/medium/mandrill\_512x512.pgm}
+
+\subsubsection*{Carregar imagem}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+\midrule
+0.000976 & 0.001447 & 262144 & 0 \\
+\bottomrule
+\end{tabular}
+
+\subsubsection*{Operações BLUR}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+\midrule
+0 & 0.006272 & 0.009305 & 786432 & 524288 \\
+1 & 0.004705 & 0.006980 & 786432 & 524288 \\
+5 & 0.003729 & 0.005533 & 786432 & 524288 \\
+10 & 0.003688 & 0.005472 & 786432 & 524288 \\
+100 & 0.003639 & 0.005399 & 786432 & 524288 \\
+\bottomrule
+\end{tabular}
+
+\subsection*{Image: pgm/large/einstein\_940x940.pgm}
+
+\subsubsection*{Carregar imagem}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+\midrule
+0.000720 & 0.001078 & 883600 & 0 \\
+\bottomrule
+\end{tabular}
+
+\subsubsection*{Operações BLUR}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+\midrule
+0 & 0.012961 & 0.019409 & 2650800 & 1767200 \\
+1 & 0.015503 & 0.023216 & 2650800 & 1767200 \\
+5 & 0.017395 & 0.026050 & 2650800 & 1767200 \\
+10 & 0.012389 & 0.018554 & 2650800 & 1767200 \\
+100 & 0.012489 & 0.018703 & 2650800 & 1767200 \\
+\bottomrule
+\end{tabular}
+
+\subsection*{Image: pgm/large/ireland\_03\_1600x1200.pgm}
+
+\subsubsection*{Carregar imagem}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+\midrule
+0.000977 & 0.001474 & 1920000 & 0 \\
+\bottomrule
+\end{tabular}
+
+\subsubsection*{Operações BLUR}
+\begin{tabular}{ccccc}
+\toprule
+\textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+\midrule
+0 & 0.034541 & 0.052110 & 5760000 & 3840000 \\
+1 & 0.035604 & 0.053714 & 5760000 & 3840000 \\
+5 & 0.034155 & 0.051527 & 5760000 & 3840000 \\
+10 & 0.030031 & 0.045306 & 5760000 & 3840000 \\
+100 & 0.029878 & 0.045076 & 5760000 & 3840000 \\
+\bottomrule
+\end{tabular}
 
 \subsection{Conclusões}
 
