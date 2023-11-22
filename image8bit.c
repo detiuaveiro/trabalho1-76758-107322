@@ -688,28 +688,31 @@ void WorseImageBlur(Image img, int dx, int dy) {
     assert(dx >= 0);
     assert(dy >= 0);
     
+    // Create a copy of the image
     int pixelsize = img->width * img->height;
     Image img_copy = ImageCreate(img->width, img->height, img->maxval);
     img_copy->pixel = (uint8*)malloc(pixelsize * sizeof(uint8));
     memcpy(img_copy->pixel, img->pixel, pixelsize * sizeof(uint8));
     
+    // Apply the filter
     for (int i = 0; i < img->height; i++) {
-
         for (int j = 0; j < img->width; j++) {
             double sum = 0.0;
             int count = 0;
-  
+            // Calculate the coordinates of the rectangle
             for (int k = i - dy; k <= i + dy; k++) {
-
                 for (int l = j - dx; l <= j + dx; l++) {
                     ADDS += 1;
+                    // Check if the pixel is inside the image
                     if (ImageValidPos(img, l, k)) {
+                        // Add the value of the pixel to the sum
                         sum += ImageGetPixel(img_copy, l, k);
                         count++;
                     }
                 }
             }
-            
+
+            // Calculate the mean and round it
             uint8 roundedValue = (uint8)(round(sum / count));
             ImageSetPixel(img, j, i, roundedValue);
         }
