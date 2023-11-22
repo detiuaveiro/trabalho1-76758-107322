@@ -106,11 +106,37 @@ testBLURl2: $(PROGS) setup
 test_to_paste: $(PROGS) setup
 	./imageTool pgm/large/einstein_940x940.pgm pgm/large/airfield-05_1600x1200.pgm paste 300,100 save paste_test_1600x1200.pgm
 
-test_to_locate: $(PROGS) setup
-	./imageTool pgm/large/einstein_940x940.pgm paste_test_1600x1200.pgm locate
-
 testLOCATE: $(PROGS) setup
+	./imageTool pgm/large/einstein_940x940.pgm pgm/large/airfield-05_1600x1200.pgm paste 300,100 save paste_test_1600x1200.pgm
 	./imageTest pgm/large/einstein_940x940.pgm paste_test_1600x1200.pgm locate
+
+testREPORTlocate: $(PROGS) setup
+	./imageTool pgm/small/bird_256x256.pgm pgm/large/ireland_03_1600x1200.pgm paste 0,0 save report_images/pequena_em_grande_1600x1200.pgm
+	./imageTool pgm/medium/mandrill_512x512.pgm pgm/large/ireland_03_1600x1200.pgm paste 0,0 save report_images/media_em_grande_1600x1200.pgm
+	./imageTool pgm/large/einstein_940x940.pgm pgm/large/ireland_03_1600x1200.pgm paste 0,0 save report_images/grande_em_grande_1600x1200.pgm
+	./imageTool pgm/small/bird_256x256.pgm pgm/medium/mandrill_512x512.pgm paste 0,0 save report_images/pequena_em_media_512x512.pgm
+	./imageTool pgm/small/bird_256x256.pgm pgm/small/art4_300x300.pgm paste 0,0 save report_images/pequena_em_pequena_300x300.pgm
+
+	./imageTool pgm/small/bird_256x256.pgm pgm/large/ireland_03_1600x1200.pgm paste 1344,944 save report_images/pequena_em_grande_2_1600x1200.pgm
+	./imageTool pgm/medium/mandrill_512x512.pgm pgm/large/ireland_03_1600x1200.pgm paste 1088,688 save report_images/media_em_grande_2_1600x1200.pgm
+	./imageTool pgm/large/einstein_940x940.pgm pgm/large/ireland_03_1600x1200.pgm paste 660,260 save report_images/grande_em_grande_2_1600x1200.pgm
+	./imageTool pgm/small/bird_256x256.pgm pgm/medium/mandrill_512x512.pgm paste 256,256 save report_images/pequena_em_media_2_512x512.pgm
+	./imageTool pgm/small/bird_256x256.pgm pgm/small/art4_300x300.pgm paste 44,44 save report_images/pequena_em_pequena_2_300x300.pgm
+
+
+testREPORTlocate2: $(PROGS) setup
+	./imageTest pgm/small/bird_256x256.pgm report_images/pequena_em_grande_1600x1200.pgm locate
+	./imageTest pgm/medium/mandrill_512x512.pgm report_images/media_em_grande_1600x1200.pgm locate
+	./imageTest pgm/large/einstein_940x940.pgm report_images/grande_em_grande_1600x1200.pgm locate
+	./imageTest pgm/small/bird_256x256.pgm report_images/pequena_em_media_512x512.pgm locate
+	./imageTest pgm/small/bird_256x256.pgm report_images/pequena_em_pequena_300x300.pgm locate
+
+	./imageTest pgm/small/bird_256x256.pgm report_images/pequena_em_grande_2_1600x1200.pgm locate
+	./imageTest pgm/medium/mandrill_512x512.pgm report_images/media_em_grande_2_1600x1200.pgm locate
+	./imageTest pgm/large/einstein_940x940.pgm report_images/grande_em_grande_2_1600x1200.pgm locate
+	./imageTest pgm/small/bird_256x256.pgm report_images/pequena_em_media_2_512x512.pgm locate
+	./imageTest pgm/small/bird_256x256.pgm report_images/pequena_em_pequena_2_300x300.pgm locate
+
 ##############
 
 .PHONY: tests
