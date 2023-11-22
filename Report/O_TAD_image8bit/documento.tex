@@ -169,20 +169,23 @@ Por este motivo, podemos fazer a análise da complexidade para cada função.
 \begingroup
 \begin{lstlisting}[language=C]
 int ImageLocateSubImage(Image img1, int* px, int* py, Image img2) { ///
-    assert (img1 != NULL);
-    assert (img2 != NULL);
-    assert (px != NULL);
-    assert (py != NULL);
-    for (int i = 0; i < img1->height - img2->height; i++) {
-        for (int j = 0; j < img1->width - img2->width; j++) {
-            if (ImageMatchSubImage(img1, j, i, img2)) {
-                *px = j;
-                *py = i;
-                return 1;
-            }
-        }
+  assert (img1 != NULL);
+  assert (img2 != NULL);
+  assert (px != NULL);
+  assert (py != NULL);
+
+  // Search for the subimage in the image
+  for (int i = 0; i <= img1->height - img2->height; i++) {
+    for (int j = 0; j <= img1->width - img2->width; j++) {
+      // If the subimage is found, set the position and end the search
+      if (ImageMatchSubImage(img1, j, i, img2)) {
+        *px = j;
+        *py = i;
+        return 1;
+      }
     }
-    return 0;
+  }
+  return 0;
 }
 \end{lstlisting}
     
@@ -192,8 +195,12 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
   assert (img2 != NULL);
   assert (ImageValidPos(img1, x, y));
   assert (ImageValidRect(img1, x, y, img2->width, img2->height));
+
+  // Compare the pixels of the subimage with the pixels of the image
   for (int i = 0; i < img2->height; i++) {
     for (int j = 0; j < img2->width; j++) {
+      ADDS += 1;
+      // If the pixels are different, return 0, continuing the search
       if (ImageGetPixel(img1, x + j, y + i) != ImageGetPixel(img2, j, i)) {
         return 0;
       }
@@ -209,6 +216,7 @@ int ImageMatchSubImage(Image img1, int x, int y, Image img2) { ///
 \subsubsection*{ImageMatchSubImage}
 A função \texttt{ImageMatchSubImage} tem uma complexidade de \(O(h \cdot w)\), pois itera por cada pixel da subimagem, 
 sendo \(h\) e \(w\) a altura e largura da subimagem, respetivamente.
+\par
 
 \subsubsection{Complexidade da Função ImageLocateSubImage}
 
@@ -336,33 +344,20 @@ A função \texttt{ImageBlur} é definida da seguinte forma:
 
 \subsection{Análise Formal da Complexidade}
 
-\subsubsection{Complexidade Temporal}
-
 \subsubsection{Inicialização da Matriz de Soma Cumulativa}
 A inicialização da matriz de soma cumulativa tem uma complexidade de \(O(n \cdot m)\), pois itera por cada pixel da imagem,
 dentro de dois ciclos aninhados, sendo \(n\) e \(m\) a altura e largura da imagem, respetivamente.
 
 \subsubsection{Aplicação do Filtro}
 A aplicação do filtro tem uma complexidade de \(O(n \cdot m)\), pois itera por cada posição da imagem, da mesma forma que a inicialização 
-da matriz de soma cumulativa. Logo, a complexidade temporal da função \texttt{ImageBlur} é \(O(n \cdot m)\).
+da matriz de soma cumulativa. Logo, a complexidade da função \texttt{ImageBlur} é \(O(n \cdot m)\).
 \par
-\subsubsection{}
-Portanto, a complexidade temporal global da função \texttt{ImageBlur} é \(O(n \cdot m)\), considerando que o fator que contribui mais para a complexidade 
+
+\subsubsection{Complexidade global}
+Portanto, a complexidade global da função \texttt{ImageBlur} é \(O(n \cdot m)\), considerando que o fator que contribui mais para a complexidade 
 é a dimensão da imagem. Isto quer dizer que o desempenho da função \texttt{ImageBlur} é linear em relação à dimensão da imagem.
 
 
-\subsubsection{Complexidade Espacial}
-
-\subsubsection{Matriz de Soma Cumulativa}
-A matriz de soma cumulativa tem uma complexidade de \(O(n \cdot m)\), pois aloca memória para uma matriz de \(n\) linhas e \(m\) colunas, 
-dando uma complexidade espacial de \(O(n \cdot m)\), sendo \(n\) e \(m\) a altura e largura da imagem, respetivamente.
-
-\subsubsection{Outras Variáveis}
-As outras variáveis e índices de ciclo têm um espaço constante e não escalam com o tamanho da imagem, não contribuindo para o escalamento da 
-complexidade espacial.
-\par
-\subsubsection*{}
-Em suma, a complexidade espacial global da função \texttt{ImageBlur} é \(O(n \cdot m)\).
 
 \subsection{Testes Experimentais}
 
@@ -428,9 +423,13 @@ Em suma, a complexidade espacial global da função \texttt{ImageBlur} é \(O(n 
 
 \subsection{Conclusões}
 
-Conseguimos confirmar que se verifica experimentalmente, aquilo que se esperava pela análise formal da complexidade. O número a complexidade, dada por \(adds\), escala linearmente com o tamanho da imagem. Conseguimos determinar \(adds\) pela multiplicação de \(image\char`_height\) por \(image\char`_length\), por exemplo para a imagem \texttt{instein\char`_940x940.pgm} temos \texttt{$adds = 940*940 = 1767200$}.
+Conseguimos confirmar que se verifica experimentalmente, aquilo que se esperava pela análise formal da complexidade. 
+A quantificação da complexidade, dada por \(adds\), escala linearmente com o tamanho da imagem e 
+conseguimos determinar \(adds\) pela multiplicação de \(image\char`_height\) por \(image\char`_length\). 
+Por exemplo para a imagem \texttt{instein\char`_940x940.pgm} temos \texttt{$adds = 940*940 = 1767200$}.
 \par
-Verifica-se também que a intensidade de \(blur\), não impacta em nada o desempenho da função, sendo igual o número de \(memops\) e \(adds\) para todos os níveis de intensidade.
+Verifica-se também que a intensidade de \(blur\), não impacta em nada o desempenho da função, sendo igual o número de \(memops\) e \(adds\) 
+para todos os níveis de intensidade.
 
 
 \section{Análise da complexidade da função ImageWorstBlur}
@@ -486,8 +485,6 @@ void WorseImageBlur(Image img, int dx, int dy) {
 
 \subsection{Análise Formal da Complexidade}
 
-\subsubsection{Complexidade Temporal}
-
 \subsubsection{Cópia da Imagem}
 A cópia da imagem tem uma complexidade de \(O(n \cdot m)\), onde \(n\) e \(m\) são a altura e largura da imagem, respetivamente.
 
@@ -500,24 +497,13 @@ O loop externo itera sobre a altura da imagem (\(n\)) e o loop interno itera sob
 \par
 Para cada pixel, há um loop adicional que itera sobre uma região retangular de tamanho \((2 \cdot dy + 1) \cdot (2 \cdot dx + 1)\).
 \par
-Portanto, a complexidade temporal geral da função \texttt{WorseImageBlur} é \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\), 
+Portanto, a complexidade geral da função \texttt{WorseImageBlur} é \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\), 
 qe aumenta quadraticamente com o tamanho da imagem e do filtro.
 
 
-\subsubsection{Complexidade Espacial}
-
-\subsubsection{Cópia da Imagem}
-A complexidade espacial para copiar a imagem é \(O(n \cdot m)\) para a imagem copiada.
-
-\subsubsection{Outras Variáveis}
-O espaço necessário para outras variáveis e índices de loop é constante e não escala com o tamanho de entrada.
-
-\subsubsection{}
-Em suma, a complexidade espacial da função \texttt{WorseImageBlur} é \(O(n \cdot m)\), que aumenta linearmente com o tamanho da imagem.
-
-\subsubsection{}
-Em suma, a complexidade temporal da função \texttt{WorseImageBlur} é \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\),
-e a complexidade espacial é \(O(n \cdot m)\). A complexidade temporal dessa função é significativamente maior do que a da função original \texttt{ImageBlur},
+\subsubsection{Complexidade global}
+Em suma, a complexidade global da função \texttt{WorseImageBlur} é \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\). 
+A complexidade desta função é significativamente maior do que a da função original \texttt{ImageBlur},
 especialmente devido aos loops aninhados para a cópia e à região considerada para a aplicação do filtro.
 
 
