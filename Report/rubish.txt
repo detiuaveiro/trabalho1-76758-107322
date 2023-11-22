@@ -1,3 +1,211 @@
+testes ImageBlur
+
+imagem pequena: pgm/small/bird_256x256.pgm
+imagem media: pgm/medium/mandrill_512x512.pgm
+imagem grande 1: pgm/large/einstein_940x940.pgm
+imagem grande 2: pgm/large/ireland_03_1600x1200.pgm
+
+niveis de blur x*x:
+    x = 0
+    x = 1
+    x = 5
+    x = 10
+    x = 100
+    
+
+# Image: pgm/small/bird_256x256.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.000088	       0.000055	          65536	              0
+# BLUR operations of pgm/small/bird_256x256.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.000678	       0.000421	         131072	         131072
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.000710	       0.000441	         131072	         131072
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.000592	       0.000368	         131072	         131072
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       0.000605	       0.000376	         131072	         131072
+# BLUR level 100
+#          time	        caltime	         memops	           adds
+       0.000580	       0.000360	         131072	         131072
+
+
+# Image: pgm/medium/mandrill_512x512.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.000143	       0.000089	         262144	              0
+# BLUR operations of pgm/medium/mandrill_512x512.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.002446	       0.001520	         524288	         524288
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.002882	       0.001791	         524288	         524288
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.002447	       0.001521	         524288	         524288
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       0.002422	       0.001505	         524288	         524288
+# BLUR level 100
+#          time	        caltime	         memops	           adds
+       0.002399	       0.001491	         524288	         524288
+
+
+# Image: pgm/large/einstein_940x940.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.000453	       0.000281	         883600	              0
+# BLUR operations of pgm/large/einstein_940x940.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.008697	       0.005390	        1767200	        1767200
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.009859	       0.006109	        1767200	        1767200
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.008381	       0.005194	        1767200	        1767200
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       0.008336	       0.005165	        1767200	        1767200
+# BLUR level 100
+#          time	        caltime	         memops	           adds
+       0.008263	       0.005120	        1767200	        1767200
+
+
+# Image: pgm/large/ireland_03_1600x1200.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.001022	       0.000633	        1920000	              0
+# BLUR operations of pgm/large/ireland_03_1600x1200.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.018296	       0.011327	        3840000	        3840000
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.022019	       0.013632	        3840000	        3840000
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.019351	       0.011980	        3840000	        3840000
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       0.018723	       0.011591	        3840000	        3840000
+# BLUR level 100
+#          time	        caltime	         memops	           adds
+       0.019255	       0.011921	        3840000	        3840000
+
+
+testes ImageWorseBlur
+
+imagem pequena: pgm/small/bird_256x256.pgm
+imagem media: pgm/medium/mandrill_512x512.pgm
+imagem grande 1: pgm/large/einstein_940x940.pgm
+imagem grande 2: pgm/large/ireland_03_1600x1200.pgm
+
+niveis de blur x*x:
+    x = 0
+    x = 1
+    x = 5
+    x = 10
+    x = 20
+    
+
+# Image: pgm/small/bird_256x256.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.000075	       0.000046	          65536	              0
+# WORSE BLUR operations of pgm/small/bird_256x256.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.000442	       0.000273	         131072	          65536
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.001798	       0.001111	         652292	         589824
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.017095	       0.010563	        7827332	        7929856
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       0.065231	       0.040305	       27796292	       28901376
+# BLUR level 20
+#          time	        caltime	         memops	           adds
+       0.231442	       0.143006	      101591312	      110166016
+
+
+# Image: pgm/medium/mandrill_512x512.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.000211	       0.000131	         262144	              0
+# WORSE BLUR operations of pgm/medium/mandrill_512x512.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.001611	       0.001002	         524288	         262144
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.007232	       0.004499	        2615300	        2359296
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.068682	       0.042722	       31644548	       31719424
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       0.263131	       0.163674	      113514308	      115605504
+# BLUR level 20
+#          time	        caltime	         memops	           adds
+       0.932412	       0.579981	      423469328	      440664064
+
+
+# Image: pgm/large/einstein_940x940.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.000502	       0.000310	         883600	              0
+# WORSE BLUR operations of pgm/large/einstein_940x940.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.005478	       0.003387	        1767200	         883600
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.024206	       0.014966	        8824724	        7952400
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.231706	       0.143263	      107179700	      106915600
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       0.885484	       0.547493	      386220500	      389667600
+# BLUR level 20
+#          time	        caltime	         memops	           adds
+       3.153342	       1.949705	     1454018000	     1485331600
+
+
+# Image: pgm/large/ireland_03_1600x1200.pgm
+# LOAD image
+#          time	        caltime	         memops	           adds
+       0.000848	       0.000528	        1920000	              0
+# WORSE BLUR operations of pgm/large/ireland_03_1600x1200.pgm
+# BLUR level 0
+#          time	        caltime	         memops	           adds
+       0.011627	       0.007232	        3840000	        1920000
+# BLUR level 1
+#          time	        caltime	         memops	           adds
+       0.051778	       0.032206	       19183204	       17280000
+# BLUR level 5
+#          time	        caltime	         memops	           adds
+       0.504233	       0.313629	      233316900	      232320000
+# BLUR level 10
+#          time	        caltime	         memops	           adds
+       1.925805	       1.197837	      842184100	      846720000
+# BLUR level 20
+#          time	        caltime	         memops	           adds
+       6.851739	       4.261733	     3181400400	     3227520000
+
+
+
+
 testes LocateSubImage
 
 grande base: pgm/large/ireland_03_1600x1200.pgm
@@ -34,105 +242,77 @@ pequena sub: pgm/small/bird_256x256.pgm
     - que acaba no ultimo pixel da imagem grande
 
 
-testes ImageBlur
-
-imagem pequena: pgm/small/bird_256x256.pgm
-imagem media: pgm/medium/mandrill_512x512.pgm
-imagem grande 1: pgm/large/einstein_940x940.pgm
-imagem grande 2: pgm/large/ireland_03_1600x1200.pgm
-
-niveis de blur x*x:
-    x = 0
-    x = 1
-    x = 5
-    x = 10
-    x = 100
-    
-
-# Image: pgm/small/bird_256x256.pgm
-# LOAD image
-#          time	        caltime	         memops	           adds
-       0.000060	       0.000091	          65536	              0
-# BLUR operations of pgm/small/bird_256x256.pgm
-# BLUR level 0
-#          time	        caltime	         memops	           adds
-       0.001066	       0.001617	         196608	         131072
-# BLUR level 1
-#          time	        caltime	         memops	           adds
-       0.001286	       0.001950	         196608	         131072
-# BLUR level 5
-#          time	        caltime	         memops	           adds
-       0.003052	       0.004629	         196608	         131072
-# BLUR level 10
-#          time	        caltime	         memops	           adds
-       0.003037	       0.004607	         196608	         131072
-# BLUR level 100
-#          time	        caltime	         memops	           adds
-       0.002946	       0.004468	         196608	         131072
+BEST CASE 
 
 
-# Image: pgm/medium/mandrill_512x512.pgm
-# LOAD image
+# LOCATE operation (imagem pequena em grande 1600x1200)
+# LOCATING first image in second image
+# FOUND (0,0)
 #          time	        caltime	         memops	           adds
-       0.000976	       0.001447	         262144	              0
-# BLUR operations of pgm/medium/mandrill_512x512.pgm
-# BLUR level 0
-#          time	        caltime	         memops	           adds
-       0.006272	       0.009305	         786432	         524288
-# BLUR level 1
-#          time	        caltime	         memops	           adds
-       0.004705	       0.006980	         786432	         524288
-# BLUR level 5
-#          time	        caltime	         memops	           adds
-       0.003729	       0.005533	         786432	         524288
-# BLUR level 10
-#          time	        caltime	         memops	           adds
-       0.003688	       0.005472	         786432	         524288
-# BLUR level 100
-#          time	        caltime	         memops	           adds
-       0.003639	       0.005399	         786432	         524288
+       0.000246	       0.000152	         131072	          65536
 
 
-# Image: pgm/large/einstein_940x940.pgm
-# LOAD image
+# LOCATE operation (imagem media em grande 1600x1200)
+# LOCATING first image in second image
+# FOUND (0,0)
 #          time	        caltime	         memops	           adds
-       0.000720	       0.001078	         883600	              0
-# BLUR operations of pgm/large/einstein_940x940.pgm
-# BLUR level 0
-#          time	        caltime	         memops	           adds
-       0.012961	       0.019409	        2650800	        1767200
-# BLUR level 1
-#          time	        caltime	         memops	           adds
-       0.015503	       0.023216	        2650800	        1767200
-# BLUR level 5
-#          time	        caltime	         memops	           adds
-       0.017395	       0.026050	        2650800	        1767200
-# BLUR level 10
-#          time	        caltime	         memops	           adds
-       0.012389	       0.018554	        2650800	        1767200
-# BLUR level 100
-#          time	        caltime	         memops	           adds
-       0.012489	       0.018703	        2650800	        1767200
-       
+       0.000919	       0.000571	         524288	         262144
 
-# Image: pgm/large/ireland_03_1600x1200.pgm
-# LOAD image
+
+# LOCATE operation (imagem grande em grande 1600x1200)
+# LOCATING first image in second image
+# FOUND (0,0)
 #          time	        caltime	         memops	           adds
-       0.000977	       0.001474	        1920000	              0
-# BLUR operations of pgm/large/ireland_03_1600x1200.pgm
-# BLUR level 0
+       0.003030	       0.001884	        1767200	         883600
+
+
+# LOCATE operation (imagem pequena em media 512x512)
+# LOCATING first image in second image
+# FOUND (0,0)
 #          time	        caltime	         memops	           adds
-       0.034541	       0.052110	        5760000	        3840000
-# BLUR level 1
+       0.000232	       0.000145	         131072	          65536
+
+
+# LOCATE operation (imagem pequena em pequena 300x300)
+# LOCATING first image in second image
+# FOUND (0,0)
 #          time	        caltime	         memops	           adds
-       0.035604	       0.053714	        5760000	        3840000
-# BLUR level 5
+       0.000240	       0.000150	         131072	          65536
+
+
+WORST CASE
+
+
+# LOCATE operation (imagem pequena em grande worst case 1600x1200)
+# LOCATING first image in second image
+# FOUND (1344,944)
 #          time	        caltime	         memops	           adds
-       0.034155	       0.051527	        5760000	        3840000
-# BLUR level 10
+       0.007787	       0.004829	        2675784	        1337892
+
+
+# LOCATE operation (imagem media em grande worst case 1600x1200)
+# LOCATING first image in second image
+# FOUND (1088,688)
 #          time	        caltime	         memops	           adds
-       0.030031	       0.045306	        5760000	        3840000
-# BLUR level 100
+       0.005454	       0.003396	        2033540	        1016770
+
+
+# LOCATE operation (imagem grande em grande worst case 1600x1200)
+# LOCATING first image in second image
+# FOUND (660,260)
 #          time	        caltime	         memops	           adds
-       0.029878	       0.045076	        5760000	        3840000
-       
+       0.004063	       0.002522	        2112406	        1056203
+
+
+# LOCATE operation (imagem pequena em media worst case 512x512)
+# LOCATING first image in second image
+# FOUND (256,256)
+#          time	        caltime	         memops	           adds
+       0.000635	       0.000395	         264036	         132018
+
+
+# LOCATE operation (imagem pequena em pequena worst case 300x300)
+# LOCATING first image in second image
+# FOUND (44,44)
+#          time	        caltime	         memops	           adds
+       0.000243	       0.000151	         135120	          67560
