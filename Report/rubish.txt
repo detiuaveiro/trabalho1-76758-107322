@@ -245,35 +245,35 @@ pequena sub: pgm/small/bird_256x256.pgm
 BEST CASE 
 
 
-# LOCATE operation (imagem pequena em grande 1600x1200)
+# LOCATE operation (imagem pequena 256x256 em grande 1600x1200)
 # LOCATING first image in second image
 # FOUND (0,0)
 #          time	        caltime	         memops	           adds
        0.000246	       0.000152	         131072	          65536
 
 
-# LOCATE operation (imagem media em grande 1600x1200)
+# LOCATE operation (imagem media 512x512 em grande 1600x1200)
 # LOCATING first image in second image
 # FOUND (0,0)
 #          time	        caltime	         memops	           adds
        0.000919	       0.000571	         524288	         262144
 
 
-# LOCATE operation (imagem grande em grande 1600x1200)
+# LOCATE operation (imagem grande 940x940 em grande 1600x1200)
 # LOCATING first image in second image
 # FOUND (0,0)
 #          time	        caltime	         memops	           adds
        0.003030	       0.001884	        1767200	         883600
 
 
-# LOCATE operation (imagem pequena em media 512x512)
+# LOCATE operation (imagem pequena 256x256 em media 512x512)
 # LOCATING first image in second image
 # FOUND (0,0)
 #          time	        caltime	         memops	           adds
        0.000232	       0.000145	         131072	          65536
 
 
-# LOCATE operation (imagem pequena em pequena 300x300)
+# LOCATE operation (imagem pequena 256x256 em pequena 300x300)
 # LOCATING first image in second image
 # FOUND (0,0)
 #          time	        caltime	         memops	           adds
@@ -283,35 +283,35 @@ BEST CASE
 WORST CASE
 
 
-# LOCATE operation (imagem pequena em grande worst case 1600x1200)
+# LOCATE operation (imagem pequena 256x256 em grande 1600x1200)
 # LOCATING first image in second image
 # FOUND (1344,944)
 #          time	        caltime	         memops	           adds
        0.007787	       0.004829	        2675784	        1337892
 
 
-# LOCATE operation (imagem media em grande worst case 1600x1200)
+# LOCATE operation (imagem media 512x512 em grande 1600x1200)
 # LOCATING first image in second image
 # FOUND (1088,688)
 #          time	        caltime	         memops	           adds
        0.005454	       0.003396	        2033540	        1016770
 
 
-# LOCATE operation (imagem grande em grande worst case 1600x1200)
+# LOCATE operation (imagem grande 940x940 em grande 1600x1200)
 # LOCATING first image in second image
 # FOUND (660,260)
 #          time	        caltime	         memops	           adds
        0.004063	       0.002522	        2112406	        1056203
 
 
-# LOCATE operation (imagem pequena em media worst case 512x512)
+# LOCATE operation (imagem pequena 256x256 em media 512x512)
 # LOCATING first image in second image
 # FOUND (256,256)
 #          time	        caltime	         memops	           adds
        0.000635	       0.000395	         264036	         132018
 
 
-# LOCATE operation (imagem pequena em pequena worst case 300x300)
+# LOCATE operation (imagem pequena 256x256 em pequena 300x300)
 # LOCATING first image in second image
 # FOUND (44,44)
 #          time	        caltime	         memops	           adds
