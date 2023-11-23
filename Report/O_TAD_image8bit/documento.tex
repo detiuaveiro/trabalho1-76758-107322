@@ -21,7 +21,9 @@
 \usepackage{xcolor}
 \usepackage{geometry} 
 \usepackage{titlesec}
+\usepackage{amsmath}
 \usepackage{booktabs}
+
 
 \titleformat{\chapter}[display]
   {\normalfont\bfseries}{}{0pt}{\Huge}
@@ -129,10 +131,15 @@ O primeiro é desenvolver desenvolver e testar o TAD (Tipo Abstrato de Dados) \t
 \par
 O segundo é analisar a complexidade computacional da função \texttt{ImageLocateSubImage} que permite determinar, caso exista, a localização de uma subimagem numa imagem dada, e da função ImageBlur(…) que aplica um filtro a uma imagem e a torna baça.
 
+\hfill
 
+\hfill
+
+\hfill
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\chapter{Estrutura de Dados e Funções do TAD image8bit}
+\hspace{-7mm}
+{\LARGE\textbf{Estrutura de Dados e Funções do TAD image8bit}}
 
 \section{Estrutura de Dados image8bit}
 
@@ -231,14 +238,131 @@ Cada chamada a \texttt{ImageMatchSubImage} tem uma complexidade de \(O(h \cdot w
 Portanto, a complexidade no pior caso é \(O((n-h) \cdot (m-w) \cdot h \cdot w)\), escalando o tempo de execução, quadraticamente, 
 com o tamanho da imagem e da subimagem.
 
+\vspace{5mm}
+
+\begingroup
+\begin{lstlisting}[language=C]
+for (i=0; i <= n-h; i++){
+    
+    for (j=0; j <= m-w; j++){
+            
+    }    for (k=0; k <= h; k++){
+            
+        }    for (l=0; l <= w; l++){}
+}
+\end{lstlisting}
+\endgroup
+
+\vspace{5mm}
+
+\begin{equation}
+     \sum_{i=0}^{n-h-1}  \hspace{2mm} \sum_{j=0}^{m-w-1}  \hspace{2mm} \sum_{k=0}^{h-1} \hspace{2mm}  \sum_{l=0}^{w-1} \hspace{2mm} 1 \notag
+\end{equation}
+
+\newpage
+
 \subsection{Testes Experimentais}
 
 
+\subsubsection{Exemplo ilustrado para a localização de uma imagem pequena numa grande }
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccccc}
+        \toprule
+        \textbf{Case} & \textbf{Position} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds}\\
+        \midrule
+        Best Case & FOUND (0,0) & 0.000246 & 0.000152 & 131072 & 65536 \\
+        Worst Case & FOUND (1344,944) & 0.007787 & 0.004829 & 2675784 & 1337892 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Performance Metrics for LOCATE Operations - Small 256x256 in Large 1600x1200}
+\end{table}
+
+
+\begin{figure}[h]
+
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=0.9\linewidth, height=6cm]{Screenshot from 2023-11-23 03-27-09.png} 
+\caption{Best Case}
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=0.9\linewidth, height=6cm]{Screenshot from 2023-11-23 03-26-59.png}
+\caption{Worst Case}
+\end{subfigure}
+\label{Robos}
+\end{figure}
+
+\vspace{-10mm}
+
+\subsubsection{Testes para outros tamanhos}
+
+\subsubsection{Melhor Caso}
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccccc}
+        \toprule
+        \textbf{Images Sizes} & \textbf{Position} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds}\\
+        \midrule
+        Medium 512x512 in Large 1600x1200 & FOUND (0,0) & 0.000919 & 0.000571 & 524288 & 262144 \\
+        Large 940x940 in Large 1600x1200 & FOUND (0,0) & 0.003030 & 0.001884 & 1767200 & 883600 \\
+        Small 256x256 in Medium 512x512 & FOUND (0,0) & 0.000232 & 0.000145 & 131072 & 65536 \\
+        Small 256x256 in Small 300x300 & FOUND (0,0) & 0.000240 & 0.000150 & 131072 & 65536 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Performance Metrics for LOCATE Operations Best Case}
+\end{table}
+
+\newpage
+
+
+\subsubsection{Pior Caso}
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{cccccc}
+        \toprule
+        \textbf{Images Sizes} & \textbf{Position} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds}\\
+        \midrule
+        Medium 512x512 in Large 1600x1200 & FOUND (1088,688) & 0.005454 & 0.003396 & 2033540 & 1016770 \\
+        Large 940x940 in Large 1600x1200 & FOUND (660,260) & 0.004063 & 0.002522 & 2112406 & 1056203 \\
+        Small 256x256 in Medium 512x512 & FOUND (256,256) & 0.000635 & 0.000395 & 264036 & 132018 \\
+        Small 256x256 in Small 300x300 & FOUND (44,44) & 0.000243 & 0.000151 & 135120 & 67560 \\
+        \bottomrule
+    \end{tabular}
+    \caption{Performance Metrics for LOCATE Operations Worst Case}
+\end{table}
 
 \subsection{Conclusões}
 
+a
+
+a
+
+a
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+a
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newpage
+
 
 \section{Analise da complexidade da função ImageBlur}
 
@@ -361,65 +485,73 @@ Portanto, a complexidade global da função \texttt{ImageBlur} é \(O(n \cdot m)
 
 \subsection{Testes Experimentais}
 
-\subsection*{Image: pgm/small/bird\_256x256.pgm}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+        \midrule
+        0 & 0.000678 & 0.000421 & 131072 & 131072 \\
+        1 & 0.000710 & 0.000441 & 131072 & 131072 \\
+        5 & 0.000592 & 0.000368 & 131072 & 131072 \\
+        10 & 0.000605 & 0.000376 & 131072 & 131072 \\
+        100 & 0.000580 & 0.000360 & 131072 & 131072 \\
+        \bottomrule
+    \end{tabular}
+    \caption*{Performance Metrics for BLUR Operations on \texttt{bird\_256x256.pgm}}
+\end{table}
 
-\subsubsection*{Operações BLUR}
-\begin{tabular}{ccccc}
-\toprule
-\textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
-\midrule
-0 & 0.001066 & 0.001617 & 196608 & 131072 \\
-1 & 0.001286 & 0.001950 & 196608 & 131072 \\
-5 & 0.003052 & 0.004629 & 196608 & 131072 \\
-10 & 0.003037 & 0.004607 & 196608 & 131072 \\
-100 & 0.002946 & 0.004468 & 196608 & 131072 \\
-\bottomrule
-\end{tabular}
 
-\subsection*{Image: pgm/medium/mandrill\_512x512.pgm}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+        \midrule
+        0 & 0.002446 & 0.001520 & 524288 & 524288 \\
+        1 & 0.002882 & 0.001791 & 524288 & 524288 \\
+        5 & 0.002447 & 0.001521 & 524288 & 524288 \\
+        10 & 0.002422 & 0.001505 & 524288 & 524288 \\
+        100 & 0.002399 & 0.001491 & 524288 & 524288 \\
+        \bottomrule
+    \end{tabular}
+    \caption*{Performance Metrics for BLUR Operations on \texttt{mandrill\_512x512.pgm}}
+\end{table}
 
-\subsubsection*{Operações BLUR}
-\begin{tabular}{ccccc}
-\toprule
-\textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
-\midrule
-0 & 0.006272 & 0.009305 & 786432 & 524288 \\
-1 & 0.004705 & 0.006980 & 786432 & 524288 \\
-5 & 0.003729 & 0.005533 & 786432 & 524288 \\
-10 & 0.003688 & 0.005472 & 786432 & 524288 \\
-100 & 0.003639 & 0.005399 & 786432 & 524288 \\
-\bottomrule
-\end{tabular}
 
-\subsection*{Image: pgm/large/einstein\_940x940.pgm}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+        \midrule
+        0 & 0.008697 & 0.005390 & 1767200 & 1767200 \\
+        1 & 0.009859 & 0.006109 & 1767200 & 1767200 \\
+        5 & 0.008381 & 0.005194 & 1767200 & 1767200 \\
+        10 & 0.008336 & 0.005165 & 1767200 & 1767200 \\
+        100 & 0.008263 & 0.005120 & 1767200 & 1767200 \\
+        \bottomrule
+    \end{tabular}
+    \caption*{Performance Metrics for BLUR Operations on \texttt{einstein\_940x940.pgm}}
+\end{table}
 
-\subsubsection*{Operações BLUR}
-\begin{tabular}{ccccc}
-\toprule
-\textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
-\midrule
-0 & 0.012961 & 0.019409 & 2650800 & 1767200 \\
-1 & 0.015503 & 0.023216 & 2650800 & 1767200 \\
-5 & 0.017395 & 0.026050 & 2650800 & 1767200 \\
-10 & 0.012389 & 0.018554 & 2650800 & 1767200 \\
-100 & 0.012489 & 0.018703 & 2650800 & 1767200 \\
-\bottomrule
-\end{tabular}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+        \midrule
+        0 & 0.018296 & 0.011327 & 3840000 & 3840000 \\
+        1 & 0.022019 & 0.013632 & 3840000 & 3840000 \\
+        5 & 0.019351 & 0.011980 & 3840000 & 3840000 \\
+        10 & 0.018723 & 0.011591 & 3840000 & 3840000 \\
+        100 & 0.019255 & 0.011921 & 3840000 & 3840000 \\
+        \bottomrule
+    \end{tabular}
+    \caption*{Performance Metrics for BLUR Operations on \texttt{ireland\_03\_1600x1200.pgm}}
+\end{table}
 
-\subsection*{Image: pgm/large/ireland\_03\_1600x1200.pgm}
-
-\subsubsection*{Operações BLUR}
-\begin{tabular}{ccccc}
-\toprule
-\textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
-\midrule
-0 & 0.034541 & 0.052110 & 5760000 & 3840000 \\
-1 & 0.035604 & 0.053714 & 5760000 & 3840000 \\
-5 & 0.034155 & 0.051527 & 5760000 & 3840000 \\
-10 & 0.030031 & 0.045306 & 5760000 & 3840000 \\
-100 & 0.029878 & 0.045076 & 5760000 & 3840000 \\
-\bottomrule
-\end{tabular}
+\newpage
 
 \subsection{Conclusões}
 
@@ -509,14 +641,80 @@ especialmente devido aos loops aninhados para a cópia e à região considerada 
 
 \subsection{Testes Experimentais}
 
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+        \midrule
+        0 & 0.000442 & 0.000273 & 131072 & 65536 \\
+        1 & 0.001798 & 0.001111 & 652292 & 589824 \\
+        5 & 0.017095 & 0.010563 & 7827332 & 7929856 \\
+        10 & 0.065231 & 0.040305 & 27796292 & 28901376 \\
+        20 & 0.231442 & 0.143006 & 101591312 & 110166016 \\
+        \bottomrule
+    \end{tabular}
+    \caption*{Performance Metrics for WORSE BLUR Operations on \texttt{bird\_256x256.pgm}}
+\end{table}
+
+\newpage
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+        \midrule
+        0 & 0.001611 & 0.001002 & 524288 & 262144 \\
+        1 & 0.007232 & 0.004499 & 2615300 & 2359296 \\
+        5 & 0.068682 & 0.042722 & 31644548 & 31719424 \\
+        10 & 0.263131 & 0.163674 & 113514308 & 115605504 \\
+        20 & 0.932412 & 0.579981 & 423469328 & 440664064 \\
+        \bottomrule
+    \end{tabular}
+    \caption*{Performance Metrics for WORSE BLUR Operations on \texttt{mandrill\_512x512.pgm}}
+\end{table}
+
+
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+        \midrule
+        0 & 0.005478 & 0.003387 & 1767200 & 883600 \\
+        1 & 0.024206 & 0.014966 & 8824724 & 7952400 \\
+        5 & 0.231706 & 0.143263 & 107179700 & 106915600 \\
+        10 & 0.885484 & 0.547493 & 386220500 & 389667600 \\
+        20 & 3.153342 & 1.949705 & 1454018000 & 1485331600 \\
+        \bottomrule
+    \end{tabular}
+    \caption*{Performance Metrics for WORSE BLUR Operations on \texttt{einstein\_940x940.pgm}}
+\end{table}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ccccc}
+        \toprule
+        \textbf{BLUR level} & \textbf{time} & \textbf{caltime} & \textbf{memops} & \textbf{adds} \\
+        \midrule
+        0 & 0.011627 & 0.007232 & 3840000 & 1920000 \\
+        1 & 0.051778 & 0.032206 & 19183204 & 17280000 \\
+        5 & 0.504233 & 0.313629 & 233316900 & 232320000 \\
+        10 & 1.925805 & 1.197837 & 842184100 & 846720000 \\
+        20 & 6.851739 & 4.261733 & 3181400400 & 3227520000 \\
+        \bottomrule
+    \end{tabular}
+    \caption*{Performance Metrics for WORSE BLUR Operations on \texttt{ireland\_03\_1600x1200.pgm}}
+\end{table}
+
 
 \subsection{Conclusões}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-
-
-\printbibliography
 
 \end{document}
