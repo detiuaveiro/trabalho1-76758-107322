@@ -149,6 +149,15 @@ testREPORTworseblur: $(PROGS) setup
 	./imageTest pgm/large/einstein_940x940.pgm report_images/worse_blur_l_940x940.pgm worseblur
 	./imageTest pgm/large/ireland_03_1600x1200.pgm report_images/worse_blur_l2_1600x1200.pgm worseblur
 
+
+testWorstCase:
+	gcc worstcase_mainimage.c image8bit.c instrumentation.c error.c -o worstcase_mainimage.o -lm
+	gcc worstcase_subimage.c image8bit.c instrumentation.c error.c  -o worstcase_subimage.o -lm
+	./worstcase_mainimage.o
+	./worstcase_subimage.o
+
+testWorstCaseLocate: $(PROGS) setup
+	./imageTest  worstcase_subimage.pgm worstcase_mainimage.pgm locate
 ##############
 
 .PHONY: tests

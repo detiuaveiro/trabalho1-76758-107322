@@ -62,8 +62,6 @@
 \lstset{style=CStyle}
 
 
-\bibliography{bibliografia}
-
 
 \begin{document}
 %%
@@ -129,7 +127,7 @@ Neste relatório é apresentado o trabalho prático realizado no âmbito da unid
 \par
 O primeiro é desenvolver desenvolver e testar o TAD (Tipo Abstrato de Dados) \texttt{image8bit}, que permite manipular imagens de 8 bits com com níveis de cinzento, em que cada pixel pode tomar valores de intensidade entre 0 e 255.
 \par
-O segundo é analisar a complexidade computacional da função \texttt{ImageLocateSubImage} que permite determinar, caso exista, a localização de uma subimagem numa imagem dada, e da função ImageBlur(…) que aplica um filtro a uma imagem e a torna baça.
+O segundo é analisar a complexidade computacional da função \texttt{ImageLocateSubImage} que permite determinar, caso exista, a localização de uma subimagem numa imagem dada, e da função \texttt{ImageBlur} que aplica um filtro a uma imagem e a torna baça.
 
 \hfill
 
@@ -143,9 +141,9 @@ O segundo é analisar a complexidade computacional da função \texttt{ImageLoca
 
 \section{Estrutura de Dados image8bit}
 
-A estrutura de dados \texttt{image8bit} é composta por um ponteiro para um array de pixeis, um inteiro que representa a largura da imagem, um inteiro que representa a altura da imagem e um inteiro que representa o número de pixeis da imagem.
+A estrutura de dados \texttt{image8bit} é composta por um ponteiro para um array de pixeis, um inteiro que representa a largura da imagem, um inteiro que representa a altura da imagem e um inteiro que representa entre que valores vão variar os tons de cinzento dos pixeis, sendo este o valor máximo que um pixel pode assumir, que corresponde à cor branca.
 \par
-O array de pixeis é um array de unsigned char, em que cada posição do array representa um pixel da imagem, e cada pixel pode tomar valores de intensidade entre 0 e 255. A posição do pixel (\(x\),\(y\)) no array é dada por \(x\) + \(y\) * (\textit{largura da imagem}).
+O array de pixeis é um array de unsigned char, em que cada posição do array representa um pixel da imagem, e cada pixel pode tomar valores de intensidade entre 0 e 255 (valor máximo que podemos meter no \textit{maxval}). A posição do pixel (\(x\),\(y\)) no array é dada por \(x\) + \(y\) * (\textit{largura da imagem}).
 \par
 A estrutura de dados \texttt{image8bit} é definida da seguinte forma:
 
@@ -167,10 +165,10 @@ struct image {
 \section{Analise da complexidade da função ImageLocateSubImage}
 \subsection{Apresentação}
 
-A função \texttt{ImageMatchSubImage} permite determinar, caso exista, a localização de uma subimagem numa imagem dada.
+A função \texttt{ImageLocateSubImage} permite determinar, caso exista, a localização de uma subimagem numa imagem dada.
 \par
 Para determinar a localização da subimagem, a função percorre a imagem dada e, para cada pixel da imagem, verifica se a subimagem se encontra nessa posição. 
-Para verificar se a subimagem se encontra nessa posição, a função percorre a subimagem e verifica se os pixeis da subimagem são iguais aos pixeis da imagem na posição (x,y) da imagem.
+Para verificar se a subimagem se encontra nessa posição, a função percorre a subimagem com a função \texttt{ImageMatchSubImage} e verifica se os pixeis da subimagem são iguais aos pixeis da imagem na posição (x,y) da imagem.
 Por este motivo, podemos fazer a análise da complexidade para cada função.
 \par
 \begingroup
@@ -231,12 +229,14 @@ sendo \(h\) e \(w\) a altura e largura da subimagem, respetivamente.
 Se a subimagem for encontrada na primeira posição, a função \texttt{ImageMatchSubImage} será chamada apenas uma vez. 
 Portanto, a complexidade no melhor caso é \(O(h \cdot w)\), escalando o tempo de execução, linearmente, com o tamanho da subimagem.
 
-\subsubsection{Pior Caso}
+\subsubsection{Pior Caso Num Cenário Real}
 No pior caso, os ciclos aninhados iteram sobre todas as posições possíveis dentro da imagem, 
 resultando em \((n-h) \cdot (m-w)\) chamadas a \texttt{ImageMatchSubImage}, com \(n\) e \(m\) a altura e largura da imagem, respetivamente. 
 Cada chamada a \texttt{ImageMatchSubImage} tem uma complexidade de \(O(h \cdot w)\).
-Portanto, a complexidade no pior caso é \(O((n-h) \cdot (m-w) \cdot h \cdot w)\), escalando o tempo de execução, quadraticamente, 
-com o tamanho da imagem e da subimagem.
+Portanto, a complexidade no pior caso num caso real é \(O((n-h) \cdot (m-w) + h \cdot w)\), escalando o tempo de execução, 
+com o tamanho da imagem e da subimagem. Na maioria dos casos existe sempre uma discrepância de aproximadamente 1\% no valor que seria esperado, devido ao facto de existirem pixeis que são iguais aos pixeis que ele encontra na subimagem nas primeiras posições, entrando assim na função \texttt{ImageMatchSubImage} e acionando o contador. Essa diferença de um 1\% são então os pixeis que são iguais aos primeiros pixeis da imagem pequena, parando eventualmente pois só correspondem alguns dos primeiros pixeis.
+
+Para o valor ser exato , teríamos que ter, por exemplo, uma imagem toda preta de base, e uma subimagem, onde o primeiro pixel não é preto. A precisão vai ser de 100\%, pois o contador só começa a contar a partir do momento onde de facto a subimagem aparece.
 
 \vspace{5mm}
 
@@ -244,11 +244,11 @@ com o tamanho da imagem e da subimagem.
 \begin{lstlisting}[language=C]
 for (i=0; i <= n-h; i++){
     
-    for (j=0; j <= m-w; j++){
+    for (j=0; j <= m-w; j++){}
+}            
+for (k=0; k <= h; k++){
             
-    }    for (k=0; k <= h; k++){
-            
-        }    for (l=0; l <= w; l++){}
+    for (l=0; l <= w; l++){}
 }
 \end{lstlisting}
 \endgroup
@@ -256,7 +256,7 @@ for (i=0; i <= n-h; i++){
 \vspace{5mm}
 
 \begin{equation}
-     \sum_{i=0}^{n-h-1}  \hspace{2mm} \sum_{j=0}^{m-w-1}  \hspace{2mm} \sum_{k=0}^{h-1} \hspace{2mm}  \sum_{l=0}^{w-1} \hspace{2mm} 1 \notag
+     \sum_{i=0}^{n-h-1}  \hspace{2mm} \sum_{j=0}^{m-w-1} \hspace{2mm} 1 \hspace{2mm} + \hspace{2mm} \sum_{k=0}^{h-1} \hspace{2mm}  \sum_{l=0}^{w-1} \hspace{2mm} 1 \notag
 \end{equation}
 
 \newpage
@@ -290,7 +290,6 @@ for (i=0; i <= n-h; i++){
 \includegraphics[width=0.9\linewidth, height=6cm]{Screenshot from 2023-11-23 03-26-59.png}
 \caption{Worst Case}
 \end{subfigure}
-\label{Robos}
 \end{figure}
 
 \vspace{-10mm}
@@ -318,7 +317,7 @@ for (i=0; i <= n-h; i++){
 \newpage
 
 
-\subsubsection{Pior Caso}
+\subsubsection{Pior Caso Cenário Real}
 
 
 \begin{table}[h]
@@ -336,9 +335,53 @@ for (i=0; i <= n-h; i++){
     \caption{Performance Metrics for LOCATE Operations Worst Case}
 \end{table}
 
+\subsection{O Pior Caso}
+
+
+A complexidade no pior caso é \(O((n-h) \cdot (m-w) \cdot h \cdot w)\), escalando o tempo de execução, quadraticamente, 
+com o tamanho da imagem e da subimagem.
+
+Este cenário não é no entanto realista, pois só é possível de ser obtido, se a subimagem fosse repetida várias vezes, apenas com o ultimo pixel diferente, para a imagem não ser igual, exceto na ultima ocorrência da subimagem, onde de facto ela se encontra. Segue-se um exemplo ilustrativo deste caso.
+
+
+\begin{figure}[h]
+
+\begin{subfigure}{0.5\textwidth}
+\includegraphics[width=0.9\linewidth, height=6cm]{Screenshot from 2023-11-24 15-30-46.png}
+\caption{Main Image 10x10}
+\end{subfigure}
+\begin{subfigure}{0.5\textwidth}
+\hspace{33mm}
+\includegraphics[width=0.15\linewidth, height=1cm]{Screenshot from 2023-11-24 15-33-07.png} 
+\caption{Subimage 2x2}
+\end{subfigure}
+\end{figure}
+
+
+
+\begingroup
+\begin{lstlisting}[language=C]
+for (i=0; i <= n-h; i++){
+    
+    for (j=0; j <= m-w; j++){
+            
+    }    for (k=0; k <= h; k++){
+            
+        }    for (l=0; l <= w; l++){}
+}
+\end{lstlisting}
+\endgroup
+
+\vspace{5mm}
+
+\begin{equation}
+     \sum_{i=0}^{n-h-1}  \hspace{2mm} \sum_{j=0}^{m-w-1}  \hspace{2mm} \sum_{k=0}^{h-1} \hspace{2mm}  \sum_{l=0}^{w-1} \hspace{2mm} 1 \notag
+\end{equation}
+
+
 \subsection{Conclusões}
 
-A função ImageLocateSubImage apresenta uma complexidade assintótica significativa, sendo particularmente sensível ao tamanho da imagem e da subimagem. No melhor caso, onde a subimagem é encontrada imediatamente, a complexidade é linear, resultando numa busca eficiente. No entanto, no pior caso, a complexidade quadrática torna a função menos eficiente para, por exemplo, imagens grandes com subimagens pequenas localizadas nas últimas posições da imagem onde está incluída. Por exemplo, para uma imagem pequena (256x256) dentro de uma imagem grande (1600x1200), a quantificação da complexidade do melhor caso é calculada usando apenas as dimensões da imagem pequena, visto esta se encontrar logo no início (  \texttt{$adds = 256*256 = 65536$}). Já o pior caso é calculado com uma quadrática, usando as dimensões de ambas as imagens (\texttt{$adds = (1600-256) * (1200-256) * 256 * 256 = ?????? $}).
+A função ImageLocateSubImage apresenta uma complexidade assintótica significativa, sendo particularmente sensível ao tamanho da imagem e da subimagem. No melhor caso, onde a subimagem é encontrada imediatamente, a complexidade é linear, resultando numa busca eficiente. No entanto, no pior caso (num cenário real), a função escala com as dimensões de ambas as imagens, sendo por isso menos eficiente para, por exemplo, imagens grandes com subimagens pequenas localizadas nas últimas posições da imagem onde está incluída. Por exemplo, para uma imagem pequena (256x256) dentro de uma imagem grande (1600x1200), a quantificação da complexidade do melhor caso é calculada usando apenas as dimensões da imagem pequena, visto esta se encontrar logo no início (  \texttt{$adds = 256\times256 = 65536$}). Já o pior caso (num cenário real) é calculado usando as dimensões de ambas as imagens (\texttt{$adds = (1600-256) \times (1200-256) + 256 \times 256 = 1334272 $}), existindo aquela discrepância nos valores (aproximadamente 1\%).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -539,7 +582,7 @@ Portanto, a complexidade global da função \texttt{ImageBlur} é \(O(n \cdot m)
 Conseguimos confirmar que se verifica experimentalmente, aquilo que se esperava pela análise formal da complexidade. 
 A quantificação da complexidade, dada por \(adds\), escala linearmente com o tamanho da imagem e 
 conseguimos determinar \(adds\) pela multiplicação de \(image\char`_height\) por \(image\char`_length\). 
-Por exemplo para a imagem \texttt{einstein\char`_940x940.pgm} temos \texttt{$adds = 940*940 = 1767200$}.
+Por exemplo para a imagem \texttt{einstein\char`_940x940.pgm} temos \texttt{$adds = 940\times940 = 1767200$}.
 \par
 Verifica-se também que a intensidade de \(blur\), não impacta em nada o desempenho da função, sendo igual o número de \(memops\) e \(adds\) 
 para todos os níveis de intensidade.
@@ -694,7 +737,7 @@ especialmente devido aos loops aninhados para a cópia e à região considerada 
 
 \subsection{Conclusões}
 
-A função WorseImageBlur apresenta uma complexidade quadrática \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\) devido à introdução de uma cópia da imagem e a uma região expandida para aplicação do filtro. Esta contrasta com a versão original ImageBlur, que possui complexidade linear em relação ao tamanho da imagem. Por exemplo para a imagem \texttt{einstein\char`_940x940.pgm} aplicando um filtro (20,20) temos \texttt{$adds = 940*940*(2*20+1)*(2*20+1) = 1485331600$}.
+A função WorseImageBlur apresenta uma complexidade quadrática \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\) devido à introdução de uma cópia da imagem e a uma região expandida para aplicação do filtro. Esta contrasta com a versão original ImageBlur, que possui complexidade linear em relação ao tamanho da imagem. Por exemplo para a imagem \texttt{einstein\char`_940x940.pgm} aplicando um filtro (20,20) temos \texttt{$adds = 940\times940\times(2\times20+1)\times(2\times20+1) = 1485331600$}.
 \par A eficiência computacional da função é fortemente influenciada pelas dimensões da imagem e do filtro, destacando a importância da otimização algorítmica em operações de processamento de imagem, o que reforça a relevância de abordagens mais simples para alcançar desempenho mais eficaz em cenários intensivos em processamento de imagem.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
