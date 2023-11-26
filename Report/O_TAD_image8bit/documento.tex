@@ -233,7 +233,7 @@ Portanto, a complexidade no melhor caso é \(O(h \cdot w)\), escalando o tempo d
 No pior caso, os ciclos aninhados iteram sobre todas as posições possíveis dentro da imagem, 
 resultando em \((n-h) \cdot (m-w)\) chamadas a \texttt{ImageMatchSubImage}, com \(n\) e \(m\) a altura e largura da imagem, respetivamente. 
 Cada chamada a \texttt{ImageMatchSubImage} tem uma complexidade de \(O(h \cdot w)\).
-Portanto, a complexidade no pior caso num caso real é \(O((n-h) \cdot (m-w) + h \cdot w)\), escalando o tempo de execução, 
+Portanto, a complexidade do pior caso num cenário real é nos dada pela expressão \((n-h) \cdot (m-w) + h \cdot w\) que resulta numa ordem de complexidade \(O(n \cdot m + h \cdot w)\), escalando o tempo de execução, 
 com o tamanho da imagem e da subimagem. Na maioria dos casos existe sempre uma discrepância de aproximadamente 1\% no valor que seria esperado, devido ao facto de existirem pixeis que são iguais aos pixeis que ele encontra na subimagem nas primeiras posições, entrando assim na função \texttt{ImageMatchSubImage} e acionando o contador. Essa diferença de um 1\% são então os pixeis que são iguais aos primeiros pixeis da imagem pequena, parando eventualmente pois só correspondem alguns dos primeiros pixeis.
 
 Para o valor ser exato , teríamos que ter, por exemplo, uma imagem toda preta de base, e uma subimagem, onde o primeiro pixel não é preto. A precisão vai ser de 100\%, pois o contador só começa a contar a partir do momento onde de facto a subimagem aparece.
@@ -338,10 +338,10 @@ for (k=0; k <= h; k++){
 \subsection{O Pior Caso}
 
 
-A complexidade no pior caso é \(O((n-h) \cdot (m-w) \cdot h \cdot w)\), escalando o tempo de execução, quadraticamente, 
+A complexidade no pior caso é nos dada pela expressão \((n-h) \cdot (m-w) \cdot h \cdot w\) resultando numa ordem de complexidade igual a \(O(n \cdot m \cdot h \cdot w)\) escalando o tempo de execução, quadraticamente, 
 com o tamanho da imagem e da subimagem.
 
-Este cenário não é no entanto realista, pois só é possível de ser obtido, se a subimagem fosse repetida várias vezes, apenas com o ultimo pixel diferente, para a imagem não ser igual, exceto na ultima ocorrência da subimagem, onde de facto ela se encontra. Segue-se um exemplo ilustrativo deste caso.
+Este cenário não é no entanto realista pois só é possível de ser obtido se a subimagem fosse repetida várias vezes, apenas com o ultimo pixel diferente para a imagem não ser igual, exceto na ultima ocorrência da subimagem, onde de facto ela se encontra. Segue-se um exemplo ilustrativo deste caso.
 
 
 \begin{figure}[h]
@@ -381,7 +381,7 @@ for (i=0; i <= n-h; i++){
 
 \subsection{Conclusões}
 
-A função ImageLocateSubImage apresenta uma complexidade assintótica significativa, sendo particularmente sensível ao tamanho da imagem e da subimagem. No melhor caso, onde a subimagem é encontrada imediatamente, a complexidade é linear, resultando numa busca eficiente. No entanto, no pior caso (num cenário real), a função escala com as dimensões de ambas as imagens, sendo por isso menos eficiente para, por exemplo, imagens grandes com subimagens pequenas localizadas nas últimas posições da imagem onde está incluída. Por exemplo, para uma imagem pequena (256x256) dentro de uma imagem grande (1600x1200), a quantificação da complexidade do melhor caso é calculada usando apenas as dimensões da imagem pequena, visto esta se encontrar logo no início (  \texttt{$adds = 256\times256 = 65536$}). Já o pior caso (num cenário real) é calculado usando as dimensões de ambas as imagens (\texttt{$adds = (1600-256) \times (1200-256) + 256 \times 256 = 1334272 $}), existindo aquela discrepância nos valores (aproximadamente 1\%).
+A função ImageLocateSubImage apresenta uma complexidade assintótica significativa, sendo particularmente sensível ao tamanho da imagem e da subimagem. No melhor caso, onde a subimagem é encontrada imediatamente, a complexidade é linear, resultando numa busca eficiente. No entanto, no pior caso (num cenário real), a função escala com as dimensões de ambas as imagens, sendo por isso menos eficiente para, por exemplo, imagens grandes com subimagens pequenas localizadas nas últimas posições da imagem onde está incluída. Por exemplo, para uma imagem pequena (256x256) dentro de uma imagem grande (1600x1200), a quantificação da complexidade do melhor caso é calculada usando apenas as dimensões da imagem pequena, visto esta se encontrar logo no início (  \texttt{$adds = 256\times256 = 65536$}). Já o pior caso (num cenário real) é calculado usando as dimensões de ambas as imagens (\texttt{$adds = (1600-256) \times (1200-256) + 256 \times 256 = 1334272 $}), existindo aquela discrepância nos valores (aproximadamente 1\% nas imagens que usamos).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -645,7 +645,7 @@ void WorseImageBlur(Image img, int dx, int dy) {
 A cópia da imagem tem uma complexidade de \(O(n \cdot m)\), onde \(n\) e \(m\) são a altura e largura da imagem, respetivamente.
 
 \subsubsection{Aplicação do Filtro}
-A aplicação do filtro tem uma complexidade de \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\), 
+A aplicação do filtro tem uma complexidade que nos é dada pela expressão \(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1)\), 
 onde \(n\) e \(m\) são a altura e largura da imagem, respetivamente, 
 \(dx\) e \(dy\) são a largura e altura do filtro, respetivamente.
 \par
@@ -653,13 +653,12 @@ O loop externo itera sobre a altura da imagem (\(n\)) e o loop interno itera sob
 \par
 Para cada pixel, há um loop adicional que itera sobre uma região retangular de tamanho \((2 \cdot dy + 1) \cdot (2 \cdot dx + 1)\).
 \par
-Portanto, a complexidade geral da função \texttt{WorseImageBlur} é \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\), 
-qe aumenta quadraticamente com o tamanho da imagem e do filtro.
+Portanto, a complexidade geral da função \texttt{WorseImageBlur} tem de ordem \(O(n \cdot m \cdot dy \cdot dx )\), 
+que aumenta quadraticamente com o tamanho da imagem e do filtro.
 
 
 \subsubsection{Complexidade global}
-Em suma, a complexidade global da função \texttt{WorseImageBlur} é \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\). 
-A complexidade desta função é significativamente maior do que a da função original \texttt{ImageBlur},
+Em suma, a complexidade global da função \texttt{WorseImageBlur} é \(O(n \cdot m \cdot dy \cdot dx )\), o que torna a complexidade desta função significativamente maior do que a da função original \texttt{ImageBlur} \(O(n \cdot m)\),
 especialmente devido aos loops aninhados para a cópia e à região considerada para a aplicação do filtro.
 
 
@@ -737,7 +736,7 @@ especialmente devido aos loops aninhados para a cópia e à região considerada 
 
 \subsection{Conclusões}
 
-A função WorseImageBlur apresenta uma complexidade quadrática \(O(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1))\) devido à introdução de uma cópia da imagem e a uma região expandida para aplicação do filtro. Esta contrasta com a versão original ImageBlur, que possui complexidade linear em relação ao tamanho da imagem. Por exemplo para a imagem \texttt{einstein\char`_940x940.pgm} aplicando um filtro (20,20) temos \texttt{$adds = 940\times940\times(2\times20+1)\times(2\times20+1) = 1485331600$}.
+A função WorseImageBlur apresenta uma complexidade quadrática \(O(n \cdot m \cdot dy \cdot dx )\) devido à introdução de uma cópia da imagem e a uma região expandida para aplicação do filtro. Esta contrasta com a versão original ImageBlur, que possui complexidade linear em relação ao tamanho da imagem. Por exemplo para a imagem \texttt{einstein\char`_940x940.pgm} aplicando um filtro (20,20) temos, aplicando a expressão \(n \cdot m \cdot (2 \cdot dy + 1) \cdot (2 \cdot dx + 1)\), \texttt{$adds = 940\times940\times(2\times20+1)\times(2\times20+1) = 1485331600$}.
 \par A eficiência computacional da função é fortemente influenciada pelas dimensões da imagem e do filtro, destacando a importância da otimização algorítmica em operações de processamento de imagem, o que reforça a relevância de abordagens mais simples para alcançar desempenho mais eficaz em cenários intensivos em processamento de imagem.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
